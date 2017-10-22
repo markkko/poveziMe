@@ -38,6 +38,11 @@
         <activity
             android:name=".app.login.LoginActivity"
             android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <service android:name=".app.notifications.firebase.MyFirebaseMessagingService">
@@ -55,11 +60,8 @@
             android:name=".app.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/MaterialAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+        </activity>
+        <activity android:name=".app.car.AddCarActivity">
         </activity>
     </application>
 

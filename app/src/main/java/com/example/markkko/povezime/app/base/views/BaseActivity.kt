@@ -50,6 +50,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     open fun bind(){}
 
+    open fun unbind(){}
+
     open fun subscribeToUIEvents() {}
 
     override fun finish() {
@@ -60,6 +62,11 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         bind()
+    }
+
+    override fun onStop() {
+        unbind()
+        super.onStop()
     }
 
     protected abstract fun injectDependencies(application: PoveziMeApplication)

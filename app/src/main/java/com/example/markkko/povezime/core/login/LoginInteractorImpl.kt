@@ -3,7 +3,7 @@ package com.example.markkko.povezime.core.login
 
 import com.example.markkko.povezime.app.di.activity.ActivityScope
 import com.example.markkko.povezime.core.data.apis.LoginApi
-import com.example.markkko.povezime.core.models.UserData
+import com.example.markkko.povezime.core.models.dto.UserDTO
 import com.example.markkko.povezime.core.util.SchedulerProvider
 import com.google.firebase.auth.FirebaseAuth
 
@@ -21,7 +21,7 @@ constructor(private val loginApi: LoginApi, private val schedulerProvider: Sched
 
     }
 
-    override fun sendLoginInfoToServer(data: LoginPostData): Single<UserData> {
+    override fun sendLoginInfoToServer(data: LoginPostData): Single<UserDTO> {
         return loginApi.sendInfo(data)
     }
 }

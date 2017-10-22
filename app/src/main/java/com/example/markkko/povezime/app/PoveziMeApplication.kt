@@ -2,6 +2,7 @@ package com.example.markkko.povezime.app
 
 import android.app.Application
 import android.content.Context
+import com.example.markkko.povezime.app.car.CarSubComponent
 
 import com.example.markkko.povezime.app.di.GoogleApiModule
 import com.example.markkko.povezime.app.di.app.AndroidModule
@@ -19,6 +20,7 @@ class PoveziMeApplication : Application() {
     var loginSubComponent: LoginSubComponent? = null
     var searchSubComponent: SearchSubComponent? = null
     var offerSubComponent: OfferSubComponent? = null
+    var carSubComponent: CarSubComponent? = null
 
     override fun onCreate() {
         super.onCreate()

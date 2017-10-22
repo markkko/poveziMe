@@ -2,9 +2,11 @@ package com.example.markkko.povezime.core.login
 
 
 import android.app.Activity
+import android.content.SharedPreferences
 import android.util.Log
+import com.example.markkko.povezime.app.util.AppConstants
+import com.example.markkko.povezime.core.base.rxTransaction
 
-import com.example.markkko.povezime.core.util.RXUtil
 import com.example.markkko.povezime.core.util.SchedulerProvider
 import com.google.firebase.auth.FirebaseAuth
 
@@ -12,36 +14,24 @@ import javax.inject.Inject
 
 import io.reactivex.disposables.CompositeDisposable
 
-class LoginPresenterImpl @Inject
-constructor(private val schedulerProvider: SchedulerProvider, private val loginInteractor: LoginInteractor) : LoginPresenter {
+class LoginPresenterImpl @Inject constructor(private val schedulerProvider: SchedulerProvider,
+                                             private val loginInteractor: LoginInteractor,
+                                             private val prefs: SharedPreferences) : LoginPresenter {
 
-    private val mAuth: FirebaseAuth
 
-    private var view: LoginPresenter.View? = null
-    private var disposables: CompositeDisposable? = null
+    override lateinit var view: LoginPresenter.View
+    override var disposables: CompositeDisposable = CompositeDisposable()
 
-    init {
-        mAuth = FirebaseAuth.getInstance()
-    }
-
-    override fun loginWithFirebase(context: Activity, firebaseAuth: FirebaseAuth, email: String, password: String) {
-        sendInfoToServer("", "")
-        /*
-		mAuth.signInWithEmailAndPassword(email, password)
-				.addOnCompleteListener(context, new OnCompleteListener<AuthResult>() {
-					@Override
-					public void onComplete(@NonNull Task<AuthResult> task) {
-						// If sign in fails, display a message to the user. If sign in succeeds
-						// the auth state listener will be notified and logic to handle the
-						// signed in user can be handled in the listener.
-						if (!task.isSuccessful()) {
-							view.onLoginFail();
-						} else {
-							view.onLoginSuccess(task.getResult().getUser());
-						}
-					}
-				});
-				*/
+    override fun loginWithFirebase(activity: Activity, email: String, password: String) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity) { task ->
+                    if (!task.isSuccessful) {
+                        view.onLoginFail()
+                    } else {
+                        sendInfoToServer(email,
+                                prefs.getString(AppConstants.SHARED_PREF_REG_ID, ""))
+                    }
+                }
     }
 
     override fun sendInfoToServer(email: String, regId: String) {
@@ -49,22 +39,17 @@ constructor(private val schedulerProvider: SchedulerProvider, private val loginI
         data.email = "marko.m@gmail.com"
         data.regId = "1234567890"
 
-        if (disposables == null || disposables!!.isDisposed) {
-            disposables = CompositeDisposable()
+        rxTransaction {
+            loginInteractor.sendLoginInfoToServer(data)
+                    .subscribeOn(schedulerProvider.backgroundThread())
+                    .observeOn(schedulerProvider.mainThread())
+                    .subscribe({ view.onSendInfoSuccess(it) })
+                    { throwable -> Log.d("www", throwable.toString()) }
         }
 
-        val disposable = loginInteractor.sendLoginInfoToServer(data)
-                .subscribeOn(schedulerProvider.backgroundThread())
-                .observeOn(schedulerProvider.mainThread())
-                .subscribe({ view!!.onSendInfoSuccess(it) }) { throwable -> Log.d("www", throwable.toString()) }
-        disposables!!.add(disposable)
+
     }
 
-    override fun bind(view: LoginPresenter.View) {
-        this.view = view
-    }
-
-    override fun unbind() {
-        RXUtil.dispose(disposables)
+    override fun clear() {
     }
 }

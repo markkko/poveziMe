@@ -20,6 +20,7 @@ import javax.inject.Inject
 import butterknife.BindView
 import com.example.markkko.povezime.app.getSearchSubComponent
 import com.example.markkko.povezime.core.models.SearchResultData
+import com.google.android.gms.location.places.PlaceBuffer
 
 
 class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
@@ -99,6 +100,20 @@ class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
     /**********************
      * Internal
      **********************/
+
+    override fun onFromUpdateInternal(places: PlaceBuffer) {
+        // Get the Place object from the buffer.
+        val place = places.get(0)
+        src = place.latLng
+        places.release()
+    }
+
+    override fun onToUpdateInternal(places: PlaceBuffer) {
+        // Get the Place object from the buffer.
+        val place = places.get(0)
+        dst = place.latLng
+        places.release()
+    }
 
     private fun createSearch(): SearchRequestData {
         return SearchRequestData(src = src!!, dst = dst!!, date = dateString!!, luggage = if (luggage.isChecked) 1 else 0,

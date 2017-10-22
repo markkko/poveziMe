@@ -1,5 +1,6 @@
 package com.example.markkko.povezime.core.di.data
 
+import com.example.markkko.povezime.core.data.apis.CarApi
 import com.example.markkko.povezime.core.data.apis.LoginApi
 import com.example.markkko.povezime.core.data.apis.SearchApi
 import com.google.gson.Gson
@@ -30,6 +31,11 @@ class RepositoryModule {
     @Singleton
     fun provideSearchApiService(retrofit: Retrofit): SearchApi {
         return retrofit.create(SearchApi::class.java)
+    }
+
+    @Provides
+    fun provideCarApiService(retrofit: Retrofit): CarApi {
+        return retrofit.create(CarApi::class.java)
     }
 
     @Provides

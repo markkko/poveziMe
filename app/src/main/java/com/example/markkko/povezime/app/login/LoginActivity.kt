@@ -1,27 +1,44 @@
 package com.example.markkko.povezime.app.login
 
-import android.app.PendingIntent.getActivity
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.FragmentTransaction
-import android.text.TextUtils
 
 import com.example.markkko.povezime.R
-import com.example.markkko.povezime.R.string.email
-import com.example.markkko.povezime.R.string.password
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseActivity
-import com.example.markkko.povezime.app.di.app.ApplicationComponent
+import com.example.markkko.povezime.app.base.views.navigateToActivityAndClearStackWithExtras
+import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.getLoginSubComponent
+import com.example.markkko.povezime.app.home.HomeActivity
 import com.example.markkko.povezime.app.releaseLoginSubComponent
+import com.example.markkko.povezime.app.util.AppConstants
 import com.example.markkko.povezime.app.util.StringUtils
 import com.example.markkko.povezime.core.login.LoginPresenter
-import com.google.firebase.auth.FirebaseAuth
+import com.example.markkko.povezime.core.models.dto.UserDTO
+import com.google.gson.Gson
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class LoginActivity : BaseActivity() {
+class LoginActivity : BaseActivity(), LoginPresenter.View {
+
+    override fun showMessage(message: String) {
+    }
+    override fun showOfflineMessage(isCritical: Boolean) {
+    }
+
+    override fun onLoginFail() {
+        showToast(R.string.login_failed)
+    }
+
+    override fun onSendInfoSuccess(userDTO: UserDTO) {
+        navigateToActivityAndClearStackWithExtras(HomeActivity::class.java, Bundle())
+        finish()
+    }
+
+    override fun onSendInfoFail() {
+    }
 
     /**********************
      * Fields
@@ -30,13 +47,23 @@ class LoginActivity : BaseActivity() {
     @Inject
     lateinit var loginPresenter: LoginPresenter
 
+    @Inject
+    lateinit var prefs: SharedPreferences
+
     /**********************
      * Setup
      *********************/
 
-    override val layoutId: Int
-        get() = R.layout.fragment_login
+    override val layoutId: Int = R.layout.fragment_login
 
+    override fun bind() {
+        loginPresenter.view = this
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tryToLoginAuto()
+    }
 
     override fun subscribeToUIEvents() {
         RxView.clicks(btn_login)
@@ -54,8 +81,9 @@ class LoginActivity : BaseActivity() {
                     valid
                 })
                 .subscribe({
-                    loginPresenter.loginWithFirebase(this, FirebaseAuth.getInstance(),
-                        emailInput.text.toString(), passwordInput.text.toString())})
+                    loginPresenter.loginWithFirebase(this,
+                            emailInput.text.toString(),
+                            passwordInput.text.toString())})
     }
 
     override fun injectDependencies(application: PoveziMeApplication) {
@@ -66,4 +94,12 @@ class LoginActivity : BaseActivity() {
         application.releaseLoginSubComponent()
     }
 
+    private fun tryToLoginAuto() {
+        val json = prefs.getString(AppConstants.SHARED_PREF_USER, "")
+        val regId = prefs.getString(AppConstants.SHARED_PREF_REG_ID, "")
+        if (json != "" && regId != "") {
+            val user = Gson().fromJson(json, UserDTO::class.java)
+            loginPresenter.sendInfoToServer(user.email, regId)
+        }
+    }
 }

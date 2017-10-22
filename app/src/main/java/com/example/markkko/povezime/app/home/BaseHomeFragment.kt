@@ -67,20 +67,14 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
             places.release()
             return@ResultCallback
         }
-        // Get the Place object from the buffer.
-        val place = places.get(0)
-        src = place.latLng
-        places.release()
+        onFromUpdateInternal(places)
     }
     private val mUpdatePlaceDetailsCallbackTo = ResultCallback<PlaceBuffer> { places ->
         if (!places.status.isSuccess) {
             places.release()
             return@ResultCallback
         }
-        // Get the Place object from the buffer.
-        val place = places.get(0)
-        dst = place.latLng
-        places.release()
+        onToUpdateInternal(places)
     }
 
     private val mAutocompleteClickListenerFrom = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -139,4 +133,11 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
 
     }
+
+    /**********************
+     * Internal
+     **********************/
+
+    abstract fun onFromUpdateInternal(places: PlaceBuffer)
+    abstract fun onToUpdateInternal(places: PlaceBuffer)
 }
