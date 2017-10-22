@@ -1,0 +1,168 @@
+<resources>
+    <string name="app_name">poveziMe</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="alert_field_cannot_be_empty">Polje ne sme biti prazno</string>
+
+    <string name="iSearch">Tražim</string>
+    <string name="iOffer">Nudim</string>
+    <string name="from">Od</string>
+    <string name="to">Do</string>
+    <string name="luggage">Kofer</string>
+    <string name="date">Datum</string>
+    <string name="search">Pretraga</string>
+    <string name="offer">Ponudi</string>
+    <string name="oneDay">+/- 1 dan</string>
+    <string name="name">Ime</string>
+    <string name="surname">Prezime</string>
+    <string name="phone">Telefon</string>
+    <string name="password">Lozinka</string>
+    <string name="time">Vreme</string>
+    <string name="send">Pošalji</string>
+    <string name="freeCap">Slobodnih mesta:</string>
+    <string name="add">Dodaj</string>
+    <string name="seats">Sedišta</string>
+    <string name="enter">Unesite</string>
+    <string name="across">Preko</string>
+    <string name="optional">(Opctiono)</string>
+    <string name="car">Vozilo</string>
+    <string name="delete">Obriši</string>
+    <string name="edit">Izmeni</string>
+    <string name="confirm">Potvrdi</string>
+    <string name="signup">Registruj se</string>
+    <string name="do_you_profile_pic">Da li zelite da postavite profilnu sliku?</string>
+    <string name="fill_all_fields">Morate popuniti sva polja</string>
+    <string name="cancel">Odustani</string>
+    <string name="viber">Viber</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="mySearches">Moje pretrage</string>
+
+    <string name="wait">Molimo sacekajte</string>
+    <string name="fetching">Podaci se obradjuju</string>
+    <string name="menu_main">Pocetna</string>
+
+    <string name="offer_added">Vasa ponuda je dodana u bazu</string>
+
+    <string name="my_offers">Moje ponude</string>
+    <string name="my_searches">Moje potraznje</string>
+
+
+    <string name="no_results">Trenutno nema nijedan podudaran rezultat</string>
+
+    <!-- Login -->
+    <string name="login_failed">Neuspesan login</string>
+    <string name="google_fetching">Uspostava veze sa google.com</string>
+    <string name="password_no_match">Lozinke se ne podudaraju</string>
+
+    <string name="my_profile">Moj profil</string>
+    <string name="requests">Zahtevi</string>
+    <string name="login">Prijavi se</string>
+    <string name="logout">Odjavi se</string>
+    <string name="profile_image">Profilna fotografija</string>
+    <string name="car_image">Fotografija automobila</string>
+
+    <string name="addnewcar">Dodaj novi automobil</string>
+    <string name="password_lenght">Šifra mora imati najmanje 6 karaktera</string>
+
+    <!-- SearchFragment -->
+
+
+    <!-- OfferFragment -->
+    <string name="car_hint">Automobil</string>
+    <string name="luggage_hint">Koferi</string>
+    <string name="seats_hint">Slobodna mesta</string>
+    <string name="no_login">Morate biti ulogovani da biste ponudili prevoz</string>
+
+    <string name="request_sent">Zahtev je poslan</string>
+    <string name="request_failed">Neuspesno slanje. Molimo pokusajte ponovo</string>
+
+
+    <!-- AddCarActivity -->
+    <string name="car_brand">Marka</string>
+    <string name="car_subline">Tip</string>
+    <string name="car_color">Boja</string>
+    <string name="car_capacity">Sedišta</string>
+    <string name="car_add_image">Dodaj sliku</string>
+
+    <!-- Menu -->
+    <string name="menu_requests">Zahtevi</string>
+    <string name="action_profile">Profil</string>
+
+    <!-- Empty fields -->
+    <string name="empty_from">Molimo izaberite destinaciju </string>
+    <string name="empty_to">Molimo izaberite odrediste</string>
+    <string name="empty_date">Molimo unesite datum</string>
+    <string name="empty_time">Molimo unesite vreme</string>
+    <string name="empty_seats">Molimo unesite broj osoba</string>
+
+    <string name="facebook_app_id">1859625067593092</string>
+    <string name="fb_login_protocol_scheme">fb1859625067593092</string>
+
+    <string name="btn_facebook">Facebook login</string>
+    <string name="btn_google">Google login</string>
+
+    <string name="yes">Da</string>
+    <string name="no">Ne</string>
+    <string name="delete_dialog">Da li ste sigurni da želite da obrišete</string>
+    <string name="noCar">Nemate nijedan automobil u bazi.</string>
+    <string name="addCar">Dodaj automobil</string>
+
+    <string name="no_reg">Nemate nalog?</string>
+    <string name="btn_reg_here">Registrujte se ovde</string>
+
+    <string name="email">Email</string>
+    <string name="auth_failed">Prijavljivanje nije uspelo. Proverite vaš email i lozinku</string>
+    <string name="change_email">Promeni email</string>
+    <string name="change_password">Promeni lozinku</string>
+    <string name="send_password_reset_email">Send Password reset email</string>
+    <string name="remove_user">Izbriši profil</string>
+    <string name="new_pass">Nova lozinka</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Lozinka</string>
+    <string name="hint_name">Ime</string>
+    <string name="hint_surname">Prezime</string>
+    <string name="hint_phone">Telefon</string>
+    <string name="btn_login">Prijavi se</string>
+    <string name="btn_login_here">Prijavi se ovde</string>
+    <string name="btn_signup">Registruj se</string>
+    <string name="btn_link_to_register">Niste registrovani? Registrujte se ovde</string>
+    <string name="title_activity_reset_password">Resetuj lozinku</string>
+    <string name="btn_forgot_password">Zaboravili ste lozinku?</string>
+    <string name="btn_reset_password">Resetuj</string>
+    <string name="btn_back"><![CDATA[<< Back]]></string>
+    <string name="hint_new_email">Novi Email</string>
+    <string name="btn_change">Izmeni</string>
+    <string name="btn_send">Pošalji</string>
+    <string name="btn_remove">Ukloni</string>
+    <string name="btn_reg">Registruj se</string>
+    <string name="btn_sign_out">Odjavi se</string>
+    <string name="already_registered">Vec ste registrovani?</string>
+    <string name="lbl_forgot_password">Zaboravljena lozinka?</string>
+    <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+
+    <string name="action_settings">Podešavanja</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_signup">Registracija</string>
+    <string name="title_activity_add_car">Dodaj automobil</string>
+    <string name="title_activity_default">DefaultActivity</string>
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_login">Prijavi se</string>
+    <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="title_activity_nav_tmp">NavTMPActivity</string>
+    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
+    <string name="title_activity_my_searches">MySearchesActivity</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="title_activity_all_offers">AllOffersActivity</string>
+    <string name="alert_push_notifications">This device cannot receive push notifications</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+</resources>
