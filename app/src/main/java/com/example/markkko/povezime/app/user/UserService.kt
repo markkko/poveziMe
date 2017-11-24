@@ -9,16 +9,18 @@ import com.google.gson.Gson
 
 object UserService {
 
+    lateinit var user: UserDTO
+
     fun updateUser(prefs: SharedPreferences, userDTO: UserDTO): Boolean {
         val json = Gson().toJson(userDTO)
         if (json == "") return false
         val editor = prefs.edit()
-        editor.putString(AppConstants.SHARED_PREF_USER, json).apply()
+        editor.putString(AppConstants.PREF_USER, json).apply()
         return true
     }
 
     fun updateUser(prefs: SharedPreferences, carData: CarDTO): Boolean {
-        val userJson = prefs.getString(AppConstants.SHARED_PREF_USER, "")
+        val userJson = prefs.getString(AppConstants.PREF_USER, "")
         if (userJson == "") return false
         val gson = Gson()
         val user = gson.fromJson(userJson, UserDTO::class.java)

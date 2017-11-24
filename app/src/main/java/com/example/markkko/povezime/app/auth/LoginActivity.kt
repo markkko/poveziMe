@@ -1,4 +1,4 @@
-package com.example.markkko.povezime.app.login
+package com.example.markkko.povezime.app.auth
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -6,14 +6,14 @@ import android.os.Bundle
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseActivity
+import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.base.views.navigateToActivityAndClearStackWithExtras
 import com.example.markkko.povezime.app.base.views.showToast
-import com.example.markkko.povezime.app.getLoginSubComponent
 import com.example.markkko.povezime.app.home.HomeActivity
-import com.example.markkko.povezime.app.releaseLoginSubComponent
+import com.example.markkko.povezime.app.user.UserService
 import com.example.markkko.povezime.app.util.AppConstants
-import com.example.markkko.povezime.app.util.StringUtils
-import com.example.markkko.povezime.core.login.LoginPresenter
+import com.example.markkko.povezime.app.util.isNullOrEmpty
+import com.example.markkko.povezime.core.auth.login.ILoginMVP
 import com.example.markkko.povezime.core.models.dto.UserDTO
 import com.google.gson.Gson
 import com.jakewharton.rxbinding2.view.RxView
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class LoginActivity : BaseActivity(), LoginPresenter.View {
+class LoginActivity : BaseActivity(), ILoginMVP.View {
 
     override fun showMessage(message: String) {
     }
@@ -33,8 +33,13 @@ class LoginActivity : BaseActivity(), LoginPresenter.View {
     }
 
     override fun onSendInfoSuccess(userDTO: UserDTO) {
-        navigateToActivityAndClearStackWithExtras(HomeActivity::class.java, Bundle())
-        finish()
+        UserService.user = userDTO
+        if (!userDTO.isCompletedInfo()) {
+            //navigateToActivityAndClearStackWithExtras(CompleteInfoActivity::class.java, Bundle())
+            //finish()
+        }
+        //navigateToActivityAndClearStackWithExtras(HomeActivity::class.java, Bundle())
+        //finish()
     }
 
     override fun onSendInfoFail() {
@@ -45,10 +50,14 @@ class LoginActivity : BaseActivity(), LoginPresenter.View {
      *********************/
 
     @Inject
-    lateinit var loginPresenter: LoginPresenter
+    lateinit var loginPresenter: ILoginMVP.Presenter
 
     @Inject
     lateinit var prefs: SharedPreferences
+
+    /**********************
+     * Callbacks
+     *********************/
 
     /**********************
      * Setup
@@ -70,11 +79,11 @@ class LoginActivity : BaseActivity(), LoginPresenter.View {
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .filter({
                     var valid = true
-                    if (StringUtils.isNullOrEmpty(emailInput)) {
+                    if (isNullOrEmpty(emailInput)) {
                         emailInput.error = getString(R.string.alert_field_cannot_be_empty)
                         valid = false
                     }
-                    if (StringUtils.isNullOrEmpty(passwordInput)) {
+                    if (isNullOrEmpty(passwordInput)) {
                         passwordInput.error = getString(R.string.alert_field_cannot_be_empty)
                         valid = false
                     }
@@ -84,19 +93,18 @@ class LoginActivity : BaseActivity(), LoginPresenter.View {
                     loginPresenter.loginWithFirebase(this,
                             emailInput.text.toString(),
                             passwordInput.text.toString())})
+
+        RxView.clicks(btn_signup).subscribe({navigateToActivity(RegistrationActivity::class.java, Bundle())})
     }
 
     override fun injectDependencies(application: PoveziMeApplication) {
-        application.getLoginSubComponent().inject(this)
+        application.activityComponent().inject(this)
     }
 
-    override fun releaseSubComponents(application: PoveziMeApplication) {
-        application.releaseLoginSubComponent()
-    }
 
     private fun tryToLoginAuto() {
-        val json = prefs.getString(AppConstants.SHARED_PREF_USER, "")
-        val regId = prefs.getString(AppConstants.SHARED_PREF_REG_ID, "")
+        val json = prefs.getString(AppConstants.PREF_USER, "")
+        val regId = prefs.getString(AppConstants.PREF_REG_ID, "")
         if (json != "" && regId != "") {
             val user = Gson().fromJson(json, UserDTO::class.java)
             loginPresenter.sendInfoToServer(user.email, regId)

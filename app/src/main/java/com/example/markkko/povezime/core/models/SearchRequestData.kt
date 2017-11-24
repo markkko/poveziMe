@@ -3,9 +3,6 @@ package com.example.markkko.povezime.core.models
 
 import com.google.android.gms.maps.model.LatLng
 
-import lombok.Builder
-import lombok.Data
-
 
 data class SearchRequestData (var src: LatLng,
                          var dst: LatLng,

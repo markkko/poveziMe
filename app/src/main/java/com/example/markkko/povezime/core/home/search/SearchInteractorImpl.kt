@@ -13,19 +13,13 @@ import javax.inject.Inject
 
 import io.reactivex.Single
 
-@ActivityScope
 class SearchInteractorImpl @Inject
-constructor(private val searchApi: SearchApi, private val schedulerProvider: SchedulerProvider) : SearchInteractor {
+constructor(private val searchApi: SearchApi,
+            private val schedulerProvider: SchedulerProvider,
+            private val context: Context) : SearchInteractor {
 
-    @Inject
-    internal var context: Context? = null
 
-    override fun unbind() {
-
-    }
-
-    override fun getSearchResults(data: SearchRequestData): Single<List<SearchResultData>> {
-        return searchApi.getSearchResults(data)
-    }
+    override fun getSearchResults(data: SearchRequestData): Single<List<SearchResultData>> =
+            searchApi.getSearchResults(data)
 
 }

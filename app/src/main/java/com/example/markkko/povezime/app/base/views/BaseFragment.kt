@@ -11,16 +11,21 @@ import com.example.markkko.povezime.app.PoveziMeApplication
 
 abstract class BaseFragment : android.support.v4.app.Fragment() {
 
-    protected abstract var layoutId: Int
+    protected abstract val layoutId: Int
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(layoutId, container, false)
-        ButterKnife.bind(this, view)
+    var newInstance = true
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(layoutId, container, false)
+        retainInstance = true
+
+        savedInstanceState?.let { newInstance = false }
         return view
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ButterKnife.bind(this, view)
         prepareData()
         subscribeForUIEvents()
     }

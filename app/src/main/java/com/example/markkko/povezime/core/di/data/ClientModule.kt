@@ -34,7 +34,7 @@ class ClientModule {
                 .connectTimeout(networkTimeoutInSeconds.toLong(), TimeUnit.SECONDS)
 
         //show logs if app is in Debug mode
-        if (isDebug)
+        //if (isDebug)
             okHttpClient.addInterceptor(loggingInterceptor)
 
         return okHttpClient.build()
@@ -46,6 +46,16 @@ class ClientModule {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         return logging
+    }
+
+    @Provides
+    @Named("authInterceptor")
+    fun provideAuthorizationInterceptor(@Named("token") token: String): Interceptor {
+        return Interceptor { chain ->
+            val request = chain.request().newBuilder().addHeader("Authorization", token).build()
+            //headerReasonCode = response.header("X-Reason-Code", "");
+            chain.proceed(request)
+        }
     }
 
     @Provides

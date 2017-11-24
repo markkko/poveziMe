@@ -98,10 +98,11 @@ class ApplicationModule {
         return FirebaseAnalytics.getInstance(context)
     }
 
+
     @Provides
     @Named("me")
     fun provideUser(prefs: SharedPreferences): UserDTO {
-        val json = prefs.getString(AppConstants.SHARED_PREF_USER, "")
+        val json = prefs.getString(AppConstants.PREF_USER, "")
         return Gson().fromJson(json, UserDTO::class.java)
     }
 

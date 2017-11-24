@@ -14,4 +14,8 @@ data class CarDTO(override val id: Long = 0,
     fun transform(): Car {
         return Car(id, brand, model, seats, image)
     }
+
+    fun makeDeepCopy(): CarDTO {
+        return CarDTO(id, brand, model, seats, image, email)
+    }
 }

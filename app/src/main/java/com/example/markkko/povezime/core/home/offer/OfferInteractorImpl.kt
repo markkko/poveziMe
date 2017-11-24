@@ -9,7 +9,6 @@ import javax.inject.Inject
 
 class OfferInteractorImpl @Inject constructor(private val offerApi: OfferApi): OfferInteractor {
 
-    override fun offerRide(offer: OfferRequest): Single<List<OfferResult>> {
-        return offerApi.offerRide(offer)
-    }
+    override fun offerRide(offer: OfferRequest): Single<List<OfferResult>> =
+            offerApi.offerRide(offer)
 }

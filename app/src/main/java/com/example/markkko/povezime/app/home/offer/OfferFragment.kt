@@ -10,7 +10,6 @@ import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.car.AddCarActivity
-import com.example.markkko.povezime.app.getOfferSubComponent
 import com.example.markkko.povezime.app.home.BaseHomeFragment
 import com.example.markkko.povezime.app.util.AppConstants
 import com.example.markkko.povezime.core.home.offer.OfferPresenter
@@ -65,13 +64,14 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
     @Inject
     lateinit var offerPresenter: OfferPresenter
 
-    @BindView(R.id.map)
     lateinit var mapView: GoogleMap
 
     private val addresses = arrayOfNulls<LatLng>(5)
 
     @Inject
     lateinit var prefs: SharedPreferences
+
+    lateinit var mapFragment: SupportMapFragment
 
     /**********************
      * Setup
@@ -81,6 +81,10 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
 
     override fun prepareData() {
         super.prepareData()
+
+        mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
         val mapFragment = childFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -89,7 +93,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
     override fun onResume() {
         super.onResume()
 
-        val user = Gson().fromJson(prefs.getString(AppConstants.SHARED_PREF_USER, ""),
+        val user = Gson().fromJson(prefs.getString(AppConstants.PREF_USER, ""),
                 UserDTO::class.java)
 
         if (user.cars.isEmpty()) {
@@ -113,7 +117,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
     }
 
     override fun injectDependencies(application: PoveziMeApplication) {
-        application.getOfferSubComponent().inject(this)
+        application.activityComponent().inject(this)
     }
 
     /**********************
@@ -303,6 +307,10 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
     @OnClick(R.id.addCarButton)
     fun onClickAddCar() {
         navigateToActivity(AddCarActivity::class.java, Bundle())
+    }
+
+    companion object {
+        fun newInstance(): OfferFragment = OfferFragment()
     }
 
 }

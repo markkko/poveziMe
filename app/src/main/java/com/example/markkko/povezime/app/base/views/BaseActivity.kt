@@ -14,13 +14,17 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected abstract val layoutId: Int
 
+    var newInstance = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(baseLayoutId)
         setupActionBar()
-        //getLayoutInflater().inflate(layoutId,  findViewById(R.id.frame_holder))
+        layoutInflater.inflate(layoutId,  findViewById(R.id.frame_holder))
         ButterKnife.bind(this)
         injectDependencies(PoveziMeApplication[this])
+
+        savedInstanceState?.let { newInstance = false }
 
         createAndSubscribe()
     }
@@ -71,6 +75,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected abstract fun injectDependencies(application: PoveziMeApplication)
 
-    protected abstract fun releaseSubComponents(application: PoveziMeApplication)
+    open protected fun releaseSubComponents(application: PoveziMeApplication){}
 
 }

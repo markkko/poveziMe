@@ -19,7 +19,7 @@ import dagger.Provides
 class GoogleApiModule {
 
     @Provides
-    @ActivityScope
+    //@ActivityScope
     internal fun provideAutocompleteAdapter(context: Context, autocompleteGoogleApiClient: GoogleApiClient,
                                             bounds: LatLngBounds, filter: AutocompleteFilter): PlaceAutocompleteAdapter {
         return PlaceAutocompleteAdapter(context, autocompleteGoogleApiClient, bounds,
@@ -27,7 +27,7 @@ class GoogleApiModule {
     }
 
     @Provides
-    @ActivityScope
+    //@ActivityScope
     fun provideAutocompleteFilter(): AutocompleteFilter {
         return AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
@@ -35,7 +35,7 @@ class GoogleApiModule {
     }
 
     @Provides
-    @ActivityScope
+    //@ActivityScope
     fun provideGoogleApiClient(context: Context): GoogleApiClient {
         return GoogleApiClient.Builder(context)
                 .addApi(Places.GEO_DATA_API)
@@ -44,7 +44,7 @@ class GoogleApiModule {
     }
 
     @Provides
-    @ActivityScope
+    //@ActivityScope
     fun provideBoundsGreater(): LatLngBounds {
         return LatLngBounds(
                 LatLng(-34.041458, 150.790100), LatLng(-33.682247, 151.383362))

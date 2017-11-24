@@ -1,26 +1,17 @@
 package com.example.markkko.povezime.app.home.search
 
-import android.view.View
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Switch
-
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.home.BaseHomeFragment
-import com.example.markkko.povezime.app.util.StringUtils
+import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.search.SearchPresenter
 import com.example.markkko.povezime.core.models.SearchRequestData
-import com.jakewharton.rxbinding2.view.RxView
-
-import java.util.concurrent.TimeUnit
-
-import javax.inject.Inject
-
-import butterknife.BindView
-import com.example.markkko.povezime.app.getSearchSubComponent
 import com.example.markkko.povezime.core.models.SearchResultData
 import com.google.android.gms.location.places.PlaceBuffer
+import com.jakewharton.rxbinding2.view.RxView
+import kotlinx.android.synthetic.main.fragment_search.*
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
@@ -36,25 +27,13 @@ class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
     override fun showResults(results: List<SearchResultData>) {
 
     }
-    
+
     /**********************
      * Fields
      **********************/
 
     @Inject
     lateinit var searchPresenter: SearchPresenter
-
-    @BindView(R.id.search_button)
-    lateinit var searchButton: View
-
-    @BindView(R.id.seats_label)
-    lateinit var seats: EditText
-
-    @BindView(R.id.luggageSwitch)
-    lateinit var luggage: Switch
-
-    @BindView(R.id.oneDayCheckBox)
-    lateinit var oneDay: CheckBox
 
     /**********************
      * Setup
@@ -64,7 +43,7 @@ class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
 
     override fun subscribeForUIEvents() {
         super.subscribeForUIEvents()
-        RxView.clicks(searchButton)
+        RxView.clicks(search)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .filter {
                     var valid = true
@@ -76,21 +55,21 @@ class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
                         toAutocomplete.error = getString(R.string.empty_to)
                         valid = false
                     }
-                    if (StringUtils.isNullOrEmpty(dateString)) {
+                    if (isNullOrEmpty(dateString)) {
                         dateLabel.error = getString(R.string.empty_date)
                         valid = false
                     }
-                    if (StringUtils.isNullOrEmpty(seats)) {
+                    if (isNullOrEmpty(seats)) {
                         seats.error = getString(R.string.empty_seats)
                         valid = false
                     }
                     valid
                 }
-                .subscribe { valid -> searchPresenter!!.getSearchResults(createSearch()) }
+                .subscribe { valid -> searchPresenter.getSearchResults(createSearch()) }
     }
 
     override fun injectDependencies(application: PoveziMeApplication) {
-        application.getSearchSubComponent().inject(this)
+        application.activityComponent().inject(this)
     }
 
     override fun bind() {
@@ -121,8 +100,6 @@ class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
     }
 
     companion object {
-        fun newInstance(): SearchFragment {
-            return SearchFragment()
-        }
+        fun newInstance(): SearchFragment = SearchFragment()
     }
 }

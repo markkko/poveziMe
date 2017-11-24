@@ -18,8 +18,6 @@ class SearchPresenterImp @Inject constructor(private val schedulerProvider: Sche
 
     override var view: SearchPresenter.View? = null
 
-
-
     override fun getSearchResults(data: SearchRequestData) {
         rxTransaction {
             searchInteractor.getSearchResults(data)

@@ -1,11 +1,8 @@
-package com.example.markkko.povezime.core.login
+package com.example.markkko.povezime.core.auth.login
 
 
 import com.google.gson.annotations.SerializedName
 
-import lombok.Data
-
-@Data
 class LoginPostData {
 
     var email: String? = null

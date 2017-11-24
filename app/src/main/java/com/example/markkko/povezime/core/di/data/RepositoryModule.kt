@@ -1,7 +1,8 @@
 package com.example.markkko.povezime.core.di.data
 
 import com.example.markkko.povezime.core.data.apis.CarApi
-import com.example.markkko.povezime.core.data.apis.LoginApi
+import com.example.markkko.povezime.core.data.apis.UserApi
+import com.example.markkko.povezime.core.data.apis.OfferApi
 import com.example.markkko.povezime.core.data.apis.SearchApi
 import com.google.gson.Gson
 
@@ -23,24 +24,24 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideLoginApiService(retrofit: Retrofit): LoginApi {
-        return retrofit.create(LoginApi::class.java)
-    }
+    fun provideLoginApiService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
     @Provides
     @Singleton
-    fun provideSearchApiService(retrofit: Retrofit): SearchApi {
-        return retrofit.create(SearchApi::class.java)
-    }
-
-    @Provides
-    fun provideCarApiService(retrofit: Retrofit): CarApi {
-        return retrofit.create(CarApi::class.java)
-    }
+    fun provideSearchApiService(retrofit: Retrofit): SearchApi =
+            retrofit.create(SearchApi::class.java)
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: HttpUrl, converterFactory: Converter.Factory, callAdapterFactory: CallAdapter.Factory, okHttpClient: OkHttpClient): Retrofit {
+    fun provideOfferApiService(retrofit: Retrofit): OfferApi =
+            retrofit.create(OfferApi::class.java)
+
+    @Provides
+    fun provideCarApiService(retrofit: Retrofit): CarApi = retrofit.create(CarApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(baseUrl: HttpUrl?, converterFactory: Converter.Factory, callAdapterFactory: CallAdapter.Factory, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(converterFactory)

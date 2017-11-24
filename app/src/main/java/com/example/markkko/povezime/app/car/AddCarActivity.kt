@@ -4,9 +4,7 @@ import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseActivity
 import com.example.markkko.povezime.app.base.views.showToast
-import com.example.markkko.povezime.app.getCarSubComponent
-import com.example.markkko.povezime.app.releaseCarSubComponent
-import com.example.markkko.povezime.app.util.StringUtils
+import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.car.CarPresenter
 import com.example.markkko.povezime.core.models.dto.CarDTO
 import com.example.markkko.povezime.core.models.dto.UserDTO
@@ -50,11 +48,11 @@ class AddCarActivity : BaseActivity(), CarPresenter.View {
         RxView.clicks(btnAdd).throttleFirst(2, TimeUnit.SECONDS)
                 .filter {
                     var valid = true
-                    if (StringUtils.isNullOrEmpty(brand)) {
+                    if (isNullOrEmpty(brand)) {
                         brand.error = getString(R.string.alert_field_cannot_be_empty)
                         valid = false
                     }
-                    if (StringUtils.isNullOrEmpty(cap)) {
+                    if (isNullOrEmpty(cap)) {
                         cap.error = getString(R.string.alert_field_cannot_be_empty)
                         valid = false
                     }
@@ -71,11 +69,11 @@ class AddCarActivity : BaseActivity(), CarPresenter.View {
     }
 
     override fun injectDependencies(application: PoveziMeApplication) {
-        application.getCarSubComponent().inject(this)
+        //application.getCarSubComponent().inject(this)
     }
 
     override fun releaseSubComponents(application: PoveziMeApplication) {
-        application.releaseCarSubComponent()
+        //application.releaseCarSubComponent()
     }
 
 }

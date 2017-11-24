@@ -1,32 +1,23 @@
 package com.example.markkko.povezime.app.home
 
 import android.app.DatePickerDialog
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.TextView
-
+import butterknife.BindView
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.base.views.BaseFragment
 import com.example.markkko.povezime.core.home.PlaceAutocompleteAdapter
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.ResultCallback
-import com.google.android.gms.location.places.AutocompletePrediction
-import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.PlaceBuffer
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.model.LatLng
-
-import java.util.Calendar
-
+import java.util.*
 import javax.inject.Inject
-
-import butterknife.BindView
 
 
 abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFailedListener {
@@ -36,21 +27,21 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
      *********************/
 
     @Inject
-    var mGoogleApiClient: GoogleApiClient? = null
+    lateinit var mGoogleApiClient: GoogleApiClient
 
     @Inject
-    var mAutocompleteAdapter: PlaceAutocompleteAdapter? = null
+    lateinit var mAutocompleteAdapter: PlaceAutocompleteAdapter
 
     @BindView(R.id.from_autocomplete_places)
     lateinit var fromAutocomplete: AutoCompleteTextView
 
     @BindView(R.id.to_autocomplete_places)
-   lateinit var toAutocomplete: AutoCompleteTextView
+    lateinit var toAutocomplete: AutoCompleteTextView
 
-    @BindView(R.id.date_button)
+    @BindView(R.id.dateButto)
     lateinit var dateButton: Button
 
-    @BindView(R.id.date_label)
+    @BindView(R.id.dateLabel)
     lateinit var dateLabel: TextView
 
     var src: LatLng? = null
@@ -78,15 +69,15 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
     }
 
     private val mAutocompleteClickListenerFrom = AdapterView.OnItemClickListener { parent, view, position, id ->
-        val item = mAutocompleteAdapter!!.getItem(position)
+        val item = mAutocompleteAdapter.getItem(position)
         val placeId = item!!.placeId
 
         val placeResult = Places.GeoDataApi
                 .getPlaceById(mGoogleApiClient, placeId)
         placeResult.setResultCallback(mUpdatePlaceDetailsCallbackFrom)
     }
-    private val mAutocompleteClickListenerTo = AdapterView.OnItemClickListener { parent, view, position, id ->
-        val item = mAutocompleteAdapter!!.getItem(position)
+    private val mAutocompleteClickListenerTo = AdapterView.OnItemClickListener { _, view, position, id ->
+        val item = mAutocompleteAdapter.getItem(position)
         val placeId = item!!.placeId
 
         val placeResult = Places.GeoDataApi
@@ -94,12 +85,12 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
         placeResult.setResultCallback(mUpdatePlaceDetailsCallbackTo)
     }
 
-    protected var dateListener: View.OnClickListener = View.OnClickListener {
+    private var dateListener: View.OnClickListener = View.OnClickListener {
         val calendar = Calendar.getInstance()
         val yy = calendar.get(Calendar.YEAR)
         val mm = calendar.get(Calendar.MONTH)
         val dd = calendar.get(Calendar.DAY_OF_MONTH)
-        val datePicker = DatePickerDialog(activity, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        val datePicker = DatePickerDialog(activity, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -117,7 +108,7 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
      **********************/
 
     override fun prepareData() {
-        mGoogleApiClient!!.connect()
+        mGoogleApiClient.connect()
         fromAutocomplete.setAdapter<PlaceAutocompleteAdapter>(mAutocompleteAdapter)
         toAutocomplete.setAdapter<PlaceAutocompleteAdapter>(mAutocompleteAdapter)
         dateLabel.text = ""
@@ -139,5 +130,6 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
      **********************/
 
     abstract fun onFromUpdateInternal(places: PlaceBuffer)
+
     abstract fun onToUpdateInternal(places: PlaceBuffer)
 }

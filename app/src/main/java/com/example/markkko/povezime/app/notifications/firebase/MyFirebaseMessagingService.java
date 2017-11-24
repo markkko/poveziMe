@@ -6,7 +6,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.markkko.povezime.app.login.LoginActivity;
+import com.example.markkko.povezime.app.auth.LoginActivity;
 import com.example.markkko.povezime.app.notifications.NotificationUtils;
 import com.example.markkko.povezime.app.util.AppConstants;
 import com.google.firebase.messaging.FirebaseMessagingService;

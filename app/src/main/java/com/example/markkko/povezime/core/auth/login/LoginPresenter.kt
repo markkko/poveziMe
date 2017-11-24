@@ -1,4 +1,4 @@
-package com.example.markkko.povezime.core.login
+package com.example.markkko.povezime.core.auth.login
 
 
 import android.app.Activity
@@ -14,30 +14,32 @@ import javax.inject.Inject
 
 import io.reactivex.disposables.CompositeDisposable
 
-class LoginPresenterImpl @Inject constructor(private val schedulerProvider: SchedulerProvider,
-                                             private val loginInteractor: LoginInteractor,
-                                             private val prefs: SharedPreferences) : LoginPresenter {
+class LoginPresenter @Inject constructor(private val schedulerProvider: SchedulerProvider,
+                                         private val loginInteractor: ILoginMVP.Interactor,
+                                         private val prefs: SharedPreferences)
+    : ILoginMVP.Presenter{
 
 
-    override lateinit var view: LoginPresenter.View
+    override lateinit var view: ILoginMVP.View
     override var disposables: CompositeDisposable = CompositeDisposable()
 
     override fun loginWithFirebase(activity: Activity, email: String, password: String) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity) { task ->
                     if (!task.isSuccessful) {
+                        Log.d("thr_login", task.exception!!.message)
                         view.onLoginFail()
                     } else {
                         sendInfoToServer(email,
-                                prefs.getString(AppConstants.SHARED_PREF_REG_ID, ""))
+                                prefs.getString(AppConstants.PREF_REG_ID, ""))
                     }
                 }
     }
 
     override fun sendInfoToServer(email: String, regId: String) {
         val data = LoginPostData()
-        data.email = "marko.m@gmail.com"
-        data.regId = "1234567890"
+        data.email = email
+        data.regId = regId
 
         rxTransaction {
             loginInteractor.sendLoginInfoToServer(data)

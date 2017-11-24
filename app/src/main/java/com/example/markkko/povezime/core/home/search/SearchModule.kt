@@ -1,24 +1,24 @@
 package com.example.markkko.povezime.core.home.search
 
 
+import com.example.markkko.povezime.app.di.GoogleApiModule
 import com.example.markkko.povezime.app.di.activity.ActivityScope
+import com.example.markkko.povezime.core.di.data.ClientModule
+import com.example.markkko.povezime.core.di.data.RepositoryModule
 
 import dagger.Module
 import dagger.Provides
 
-@Module
+
+@Module(includes = arrayOf(GoogleApiModule::class))
 class SearchModule {
 
     @Provides
-    @ActivityScope
-    internal fun provideSearchPresenter(searchPresenterImp: SearchPresenterImp): SearchPresenter {
-        return searchPresenterImp
-    }
+    internal fun provideSearchPresenter(searchPresenterImp: SearchPresenterImp): SearchPresenter =
+            searchPresenterImp
 
     @Provides
-    @ActivityScope
-    internal fun provideSearchInteractor(searchInteractor: SearchInteractorImpl): SearchInteractor {
-        return searchInteractor
-    }
+    internal fun provideSearchInteractor(searchInteractor: SearchInteractorImpl): SearchInteractor =
+            searchInteractor
 
 }
