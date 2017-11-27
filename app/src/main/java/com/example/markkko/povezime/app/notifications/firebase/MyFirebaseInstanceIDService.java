@@ -9,8 +9,11 @@ import com.example.markkko.povezime.app.util.AppConstants;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import javax.inject.Inject;
+
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
+
 
     @Override
     public void onTokenRefresh() {
@@ -35,10 +38,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void storeRegIdInPref(String token) {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(AppConstants.PREF_REG_ID, 0);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(AppConstants.PREF_USER, 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
-        editor.putString("regId", token);
+        editor.putString(AppConstants.PREF_REG_ID, token);
         editor.apply();
     }
 }

@@ -37,16 +37,14 @@ class LoginPresenter @Inject constructor(private val schedulerProvider: Schedule
     }
 
     override fun sendInfoToServer(email: String, regId: String) {
-        val data = LoginPostData()
-        data.email = email
-        data.regId = regId
+        val data = LoginPostData(email, regId)
 
         rxTransaction {
             loginInteractor.sendLoginInfoToServer(data)
                     .subscribeOn(schedulerProvider.backgroundThread())
                     .observeOn(schedulerProvider.mainThread())
                     .subscribe({ view.onSendInfoSuccess(it) })
-                    { throwable -> Log.d("www", throwable.toString()) }
+                    { throwable -> Log.d("thr_send_info", throwable.toString()) }
         }
 
 

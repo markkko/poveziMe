@@ -33,13 +33,13 @@ class LoginActivity : BaseActivity(), ILoginMVP.View {
     }
 
     override fun onSendInfoSuccess(userDTO: UserDTO) {
-        UserService.user = userDTO
+        prefs.edit().putString(AppConstants.PREF_EMAIL, userDTO.email).apply()
         if (!userDTO.isCompletedInfo()) {
-            //navigateToActivityAndClearStackWithExtras(CompleteInfoActivity::class.java, Bundle())
-            //finish()
+            navigateToActivity(CompleteInfoActivity::class.java, Bundle())
+            finishAffinity()
         }
-        //navigateToActivityAndClearStackWithExtras(HomeActivity::class.java, Bundle())
-        //finish()
+        navigateToActivity(HomeActivity::class.java, Bundle())
+        finishAffinity()
     }
 
     override fun onSendInfoFail() {
@@ -103,11 +103,10 @@ class LoginActivity : BaseActivity(), ILoginMVP.View {
 
 
     private fun tryToLoginAuto() {
-        val json = prefs.getString(AppConstants.PREF_USER, "")
+        val email = prefs.getString(AppConstants.PREF_EMAIL, "")
         val regId = prefs.getString(AppConstants.PREF_REG_ID, "")
-        if (json != "" && regId != "") {
-            val user = Gson().fromJson(json, UserDTO::class.java)
-            loginPresenter.sendInfoToServer(user.email, regId)
+        if (email != "" && regId != "") {
+            loginPresenter.sendInfoToServer(email, regId)
         }
     }
 }

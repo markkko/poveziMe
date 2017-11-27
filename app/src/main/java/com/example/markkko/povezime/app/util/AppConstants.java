@@ -28,5 +28,6 @@ public class AppConstants {
 
 	public static final String SHARED_PREF_FIREBASE = "ah_firebase";
 	public static final String PREF_USER = "shared_pref_user";
+	public static final String PREF_EMAIL = "email";
 	public static final String PREF_REG_ID = "regId";
 }
