@@ -49,7 +49,6 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
         super.onAttach(context)
 
         injectDependencies(PoveziMeApplication[getContext()])
-
     }
 
     protected abstract fun injectDependencies(application: PoveziMeApplication)

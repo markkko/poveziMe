@@ -10,7 +10,7 @@ import dagger.Module
 import dagger.Provides
 
 
-@Module(includes = arrayOf(GoogleApiModule::class))
+@Module(includes = [(GoogleApiModule::class)])
 class SearchModule {
 
     @Provides

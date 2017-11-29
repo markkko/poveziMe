@@ -3,6 +3,7 @@ package com.example.markkko.povezime.app.base.views
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import butterknife.ButterKnife
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
@@ -36,7 +37,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     open fun setupActionBar() {
-        //setSupportActionBar(getToolbar())
+        setSupportActionBar(findViewById(R.id.toolbar))
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.elevation = 0F
@@ -58,6 +59,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     open fun subscribeToUIEvents() {}
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun finish() {
         super.finish()
         releaseSubComponents(PoveziMeApplication[this])
@@ -73,7 +82,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    protected abstract fun injectDependencies(application: PoveziMeApplication)
+    open protected fun injectDependencies(application: PoveziMeApplication){}
 
     open protected fun releaseSubComponents(application: PoveziMeApplication){}
 

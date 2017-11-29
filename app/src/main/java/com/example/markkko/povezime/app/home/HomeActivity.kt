@@ -1,17 +1,14 @@
 package com.example.markkko.povezime.app.home
 
+import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v7.app.AppCompatActivity
-
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-
 import com.example.markkko.povezime.R
-import com.example.markkko.povezime.app.di.activity.ActivityScope
 import com.example.markkko.povezime.app.home.offer.OfferFragment
 import com.example.markkko.povezime.app.home.search.SearchFragment
 import kotlinx.android.synthetic.main.activity_home.*
@@ -35,7 +32,6 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_home, menu)
         return true
@@ -50,12 +46,11 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
 
-           return if (position == 0) SearchFragment.newInstance()
+            return if (position == 0) SearchFragment.newInstance()
             else OfferFragment.newInstance()
         }
 

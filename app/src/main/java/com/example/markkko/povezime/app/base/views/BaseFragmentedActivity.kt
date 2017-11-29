@@ -44,7 +44,4 @@ abstract class BaseFragmentedActivity: BaseActivity() {
 
     abstract fun getFragment(): Fragment
 
-    override fun injectDependencies(application: PoveziMeApplication) {
-
-    }
 }

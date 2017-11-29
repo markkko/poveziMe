@@ -2,11 +2,24 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <include
-        layout="@layout/app_bar_main"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:popupTheme="@style/Theme.AppCompat.NoActionBar"
+            android:theme="@style/MaterialAppTheme.AppBarOverlay"/>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main"/>
 
 </android.support.design.widget.CoordinatorLayout>

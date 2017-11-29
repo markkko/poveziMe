@@ -1,5 +1,6 @@
 package com.example.markkko.povezime.app.home.offer
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -64,6 +65,21 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     private val addresses = arrayOfNulls<LatLng>(5)
 
     lateinit var mapFragment: SupportMapFragment
+
+    /**********************
+     * Callbacks
+     ***********************/
+
+    @OnClick(R.id.acrossButton)
+    fun onClickAcross() {
+        acrossLayout.visibility = if (acrossLayout.visibility == View.GONE) View.VISIBLE else View.GONE
+    }
+
+    @OnClick(R.id.addCarButton)
+    fun onClickAddCar() {
+        val intent = Intent(activity, AddCarActivity::class.java)
+        startActivity(intent)
+    }
 
     /**********************
      * Setup
@@ -287,18 +303,8 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     }
 
     /**********************
-     * Other callbacks
+     * Companion
      ***********************/
-
-    @OnClick(R.id.acrossButton)
-    fun onClickAcross() {
-        acrossLayout.visibility = if (acrossLayout.visibility == View.GONE) View.VISIBLE else View.GONE
-    }
-
-    @OnClick(R.id.addCarButton)
-    fun onClickAddCar() {
-        navigateToActivity(AddCarActivity::class.java, Bundle())
-    }
 
     companion object {
         fun newInstance(): OfferFragment = OfferFragment()

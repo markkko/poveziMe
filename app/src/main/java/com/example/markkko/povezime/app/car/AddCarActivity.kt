@@ -1,79 +1,92 @@
 package com.example.markkko.povezime.app.car
 
+import android.support.v4.app.Fragment
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
-import com.example.markkko.povezime.app.base.views.BaseActivity
+import com.example.markkko.povezime.app.base.views.BaseFragment
+import com.example.markkko.povezime.app.base.views.BaseFragmentedActivity
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.util.isNullOrEmpty
-import com.example.markkko.povezime.core.car.CarPresenter
+import com.example.markkko.povezime.core.car.ICarMVP
 import com.example.markkko.povezime.core.models.Car
-import com.example.markkko.povezime.core.models.User
 import com.jakewharton.rxbinding2.view.RxView
-import kotlinx.android.synthetic.main.activity_add_car.*
+import kotlinx.android.synthetic.main.fragment_add_car.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.inject.Named
 
-class AddCarActivity : BaseActivity(), CarPresenter.View {
+class AddCarActivity : BaseFragmentedActivity() {
 
-    override fun showMessage(message: String) {
-        showToast(message)
-    }
+    override fun getFragment(): Fragment = AddCarFragment.newInstance()
 
-    override fun showOfflineMessage(isCritical: Boolean) {
-    }
+    class AddCarFragment : BaseFragment(), ICarMVP.View {
 
-    override fun onCarAdded() {
-        showToast(R.string.car_added_successfully)
-    }
+        override fun showMessage(message: String) {
+            showToast(message)
+        }
 
-    /**********************
-     * Fields
-     **********************/
+        override fun showOfflineMessage(isCritical: Boolean) {
+        }
 
-    @Inject
-    lateinit var carPresenter: CarPresenter
+        override fun onCarAdded() {
+            showToast(R.string.car_added_successfully)
+            activity.finish()
+        }
 
-    @Inject
-    @field:Named("me")
-    lateinit var me: User
+        /**********************
+         * Fields
+         **********************/
 
-    /**********************
-     * Setup
-     **********************/
+        @Inject
+        lateinit var presenter: ICarMVP.Presenter
 
-    override val layoutId: Int = R.layout.activity_add_car
+        /**********************
+         * Setup
+         **********************/
 
-    override fun subscribeToUIEvents() {
-        RxView.clicks(btnAdd).throttleFirst(2, TimeUnit.SECONDS)
-                .filter {
-                    var valid = true
-                    if (isNullOrEmpty(brand)) {
-                        brand.error = getString(R.string.alert_field_cannot_be_empty)
-                        valid = false
+        override val layoutId: Int = R.layout.fragment_add_car
+
+        override fun prepareData() {
+            activity.title = getString(R.string.add)
+        }
+
+        override fun subscribeForUIEvents() {
+
+            val me = presenter.me()
+
+            RxView.clicks(btnAdd).throttleFirst(2, TimeUnit.SECONDS)
+                    .filter {
+                        var valid = true
+                        if (isNullOrEmpty(brand)) {
+                            brand.error = getString(R.string.alert_field_cannot_be_empty)
+                            valid = false
+                        }
+                        if (isNullOrEmpty(cap)) {
+                            cap.error = getString(R.string.alert_field_cannot_be_empty)
+                            valid = false
+                        }
+                        valid
                     }
-                    if (isNullOrEmpty(cap)) {
-                        cap.error = getString(R.string.alert_field_cannot_be_empty)
-                        valid = false
+                    .subscribe { _ ->
+                        presenter.addCar(
+                                Car(brand = brand.text.toString(),
+                                        model = subline.text.toString(),
+                                        seats = cap.text.toString().toInt(),
+                                        userId = me.id,
+                                        email = me.email))
                     }
-                    valid }
-                .subscribe {valid -> carPresenter.addCar(
-                        Car(brand = brand.text.toString(),
-                                model = subline.text.toString(),
-                                seats = cap.text.toString().toInt(),
-                                email = me.email))}
-    }
+        }
 
-    override fun bind() {
-        carPresenter.view = this
-    }
 
-    override fun injectDependencies(application: PoveziMeApplication) {
-        //application.getCarSubComponent().inject(this)
-    }
+        override fun bind() {
+            presenter.view = this
+        }
 
-    override fun releaseSubComponents(application: PoveziMeApplication) {
-        //application.releaseCarSubComponent()
-    }
+        override fun injectDependencies(application: PoveziMeApplication) {
+            application.activityComponent().inject(this)
+        }
 
+        companion object {
+            fun newInstance() = AddCarFragment()
+        }
+    }
 }

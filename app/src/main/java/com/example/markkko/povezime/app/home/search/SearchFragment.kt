@@ -17,11 +17,9 @@ import javax.inject.Inject
 class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
 
     override fun showMessage(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showOfflineMessage(isCritical: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showResults(results: List<SearchResultData>) {
@@ -81,14 +79,12 @@ class SearchFragment : BaseHomeFragment(), SearchPresenter.View {
      **********************/
 
     override fun onFromUpdateInternal(places: PlaceBuffer) {
-        // Get the Place object from the buffer.
         val place = places.get(0)
         src = place.latLng
         places.release()
     }
 
     override fun onToUpdateInternal(places: PlaceBuffer) {
-        // Get the Place object from the buffer.
         val place = places.get(0)
         dst = place.latLng
         places.release()
