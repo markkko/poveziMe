@@ -1,36 +1,31 @@
 package com.example.markkko.povezime.app.home.offer
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import butterknife.BindView
 import butterknife.OnClick
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.BaseHomeFragment
-import com.example.markkko.povezime.app.util.AppConstants
-import com.example.markkko.povezime.core.home.offer.OfferPresenter
+import com.example.markkko.povezime.core.home.offer.IOfferMVP
 import com.example.markkko.povezime.core.models.OfferResult
-import com.example.markkko.povezime.core.models.dto.UserDTO
+import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.location.places.PlaceBuffer
+import com.google.android.gms.location.places.Places
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import javax.inject.Inject
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_offer.*
-import com.google.android.gms.common.api.ResultCallback
-import com.google.android.gms.location.places.Places
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.gson.Gson
+import javax.inject.Inject
 
 
-class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback {
+class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
 
     override fun showMessage(message: String) {
@@ -62,14 +57,11 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
      ***********************/
 
     @Inject
-    lateinit var offerPresenter: OfferPresenter
+    lateinit var presenter: IOfferMVP.Presenter
 
     lateinit var mapView: GoogleMap
 
     private val addresses = arrayOfNulls<LatLng>(5)
-
-    @Inject
-    lateinit var prefs: SharedPreferences
 
     lateinit var mapFragment: SupportMapFragment
 
@@ -93,13 +85,12 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
     override fun onResume() {
         super.onResume()
 
-        val user = Gson().fromJson(prefs.getString(AppConstants.PREF_USER, ""),
-                UserDTO::class.java)
+        val user = presenter.me()
 
         if (user.cars.isEmpty()) {
             addCarLayout.visibility = View.VISIBLE
             mainScrollView.visibility = View.GONE
-        } else{
+        } else {
             mainScrollView.visibility = View.VISIBLE
             addCarLayout.visibility = View.GONE
         }
@@ -113,7 +104,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
     }
 
     override fun bind() {
-        offerPresenter.view = this
+        presenter.view = this
     }
 
     override fun injectDependencies(application: PoveziMeApplication) {
@@ -140,7 +131,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
             options.position(it)
             options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
             mapView.addMarker(options)
-            offerPresenter.getRoute(addresses)
+            presenter.getRoute(addresses)
         }
         places.release()
     }
@@ -157,7 +148,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
             options.position(it)
             options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             mapView.addMarker(options)
-            offerPresenter.getRoute(addresses)
+            presenter.getRoute(addresses)
         }
         places.release()
     }
@@ -183,7 +174,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
             options.position(addresses[1]!!)
             options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
             mapView.addMarker(options)
-            offerPresenter.getRoute(addresses)
+            presenter.getRoute(addresses)
         }
 
         places.release()
@@ -210,7 +201,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
             options.position(addresses[1]!!)
             options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
             mapView.addMarker(options)
-            offerPresenter.getRoute(addresses)
+            presenter.getRoute(addresses)
         }
 
         places.release()
@@ -235,7 +226,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
             options.position(addresses[1]!!)
             options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
             mapView.addMarker(options)
-            offerPresenter.getRoute(addresses)
+            presenter.getRoute(addresses)
         }
 
         places.release()
@@ -243,7 +234,7 @@ class OfferFragment: BaseHomeFragment(), OfferPresenter.View, OnMapReadyCallback
 
     @OnClick(R.id.opt1, R.id.opt2, R.id.opt3)
     fun onClickOpt(view: View) {
-        when(view.id) {
+        when (view.id) {
             R.id.opt1 -> {
                 if (addresses[3] == null)
                     opt2Input.visibility = View.GONE

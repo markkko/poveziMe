@@ -10,10 +10,9 @@ import com.example.markkko.povezime.app.user.UserService
 import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.app.util.isValidPhoneNumber
 import com.example.markkko.povezime.core.auth.completeInfo.ICompleteInfoMVP
-import com.example.markkko.povezime.core.models.dto.UserDTO
+import com.example.markkko.povezime.core.models.User
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.activity_complete_info.*
-import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -37,7 +36,7 @@ class CompleteInfoFragment: BaseFragment(), ICompleteInfoMVP.View  {
 
     override fun showOfflineMessage(isCritical: Boolean) {}
 
-    override fun onInfoCompleted(user: UserDTO) {
+    override fun onInfoCompleted(user: User) {
         UserService.user = user
         navigateToActivityAndClearStackWithExtras(HomeActivity::class.java, Bundle())
         activity.finish()
@@ -81,7 +80,7 @@ class CompleteInfoFragment: BaseFragment(), ICompleteInfoMVP.View  {
      * Inernal
      *********************/
 
-    private fun createUser(): UserDTO {
+    private fun createUser(): User {
         val user = UserService.user.makeDeepCopy()
         user.name = name.text.toString()
         user.surname = surname.text.toString()

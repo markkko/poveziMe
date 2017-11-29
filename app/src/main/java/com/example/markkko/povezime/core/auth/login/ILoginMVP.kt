@@ -1,10 +1,11 @@
 package com.example.markkko.povezime.core.auth.login
 
 import android.app.Activity
+import com.example.markkko.povezime.core.auth.LoginResponse
 import com.example.markkko.povezime.core.base.BaseInteractor
 import com.example.markkko.povezime.core.base.BasePresenter
 import com.example.markkko.povezime.core.base.BaseView
-import com.example.markkko.povezime.core.models.dto.UserDTO
+import com.example.markkko.povezime.core.models.User
 import io.reactivex.Single
 
 
@@ -12,7 +13,7 @@ interface ILoginMVP {
 
     interface View : BaseView {
         fun onLoginFail()
-        fun onSendInfoSuccess(userDTO: UserDTO)
+        fun onSendInfoSuccess(user: User)
         fun onSendInfoFail()
     }
 
@@ -26,6 +27,6 @@ interface ILoginMVP {
 
 
     interface Interactor : BaseInteractor {
-        fun sendLoginInfoToServer(data: LoginPostData): Single<UserDTO>
+        fun sendLoginInfoToServer(data: LoginPostData): Single<User>
     }
 }

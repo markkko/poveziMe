@@ -1,18 +1,14 @@
 package com.example.markkko.povezime.app.auth
 
-import android.os.Bundle
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseFragment
-import com.example.markkko.povezime.app.base.views.navigateToActivityAndClearStackWithExtras
-import com.example.markkko.povezime.app.user.UserService
+import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.app.util.isValidEmail
 import com.example.markkko.povezime.core.auth.registration.IRegistrationMVP
-import com.example.markkko.povezime.core.models.dto.UserDTO
 import com.google.firebase.auth.AuthResult
 import com.jakewharton.rxbinding2.view.RxView
-import kotlinx.android.synthetic.main.activity_complete_info.*
 import kotlinx.android.synthetic.main.activity_registration.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -38,9 +34,8 @@ class RegistrationFragment : BaseFragment(), IRegistrationMVP.View {
     override fun showOfflineMessage(isCritical: Boolean) {}
 
     override fun onRegistrationComplete(results: AuthResult) {
-        UserService.user = UserDTO(email = results.user.email!!, viber = 0, whatsapp = 0)
-        navigateToActivityAndClearStackWithExtras(CompleteInfoActivity::class.java, Bundle())
-        activity.finish()
+        navigateToActivity(LoginActivity::class.java)
+        activity.finishAffinity()
     }
 
     override fun onRegistrationFailed() {

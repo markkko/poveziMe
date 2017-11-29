@@ -6,8 +6,8 @@ import com.example.markkko.povezime.app.base.views.BaseActivity
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.car.CarPresenter
-import com.example.markkko.povezime.core.models.dto.CarDTO
-import com.example.markkko.povezime.core.models.dto.UserDTO
+import com.example.markkko.povezime.core.models.Car
+import com.example.markkko.povezime.core.models.User
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.activity_add_car.*
 import java.util.concurrent.TimeUnit
@@ -36,7 +36,7 @@ class AddCarActivity : BaseActivity(), CarPresenter.View {
 
     @Inject
     @field:Named("me")
-    lateinit var me: UserDTO
+    lateinit var me: User
 
     /**********************
      * Setup
@@ -58,7 +58,7 @@ class AddCarActivity : BaseActivity(), CarPresenter.View {
                     }
                     valid }
                 .subscribe {valid -> carPresenter.addCar(
-                        CarDTO(brand = brand.text.toString(),
+                        Car(brand = brand.text.toString(),
                                 model = subline.text.toString(),
                                 seats = cap.text.toString().toInt(),
                                 email = me.email))}

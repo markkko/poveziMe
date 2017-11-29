@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 import com.example.markkko.povezime.BuildConfig
 import com.example.markkko.povezime.app.util.AppConstants
 import com.example.markkko.povezime.app.util.AppSchedulerProvider
-import com.example.markkko.povezime.core.models.dto.UserDTO
+import com.example.markkko.povezime.core.models.User
 import com.example.markkko.povezime.core.util.Constants
 import com.example.markkko.povezime.core.util.SchedulerProvider
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -101,9 +101,9 @@ class ApplicationModule {
 
     @Provides
     @Named("me")
-    fun provideUser(prefs: SharedPreferences): UserDTO {
+    fun provideUser(prefs: SharedPreferences): User {
         val json = prefs.getString(AppConstants.PREF_USER, "")
-        return Gson().fromJson(json, UserDTO::class.java)
+        return Gson().fromJson(json, User::class.java)
     }
 
 

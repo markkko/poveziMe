@@ -62,6 +62,12 @@ fun BaseFragment.navigateToActivityAndFinish(activity: Class<*>, bundle: Bundle)
     getActivity.finish()
 }
 
+fun BaseFragment.navigateToActivity(activity: Class<*>) {
+    val getActivity = getActivity() as BaseActivity
+    val intent = Intent(getActivity, activity)
+    startActivity(intent)
+}
+
 fun BaseFragment.navigateToActivity(activity: Class<*>, bundle: Bundle) {
     val getActivity = getActivity() as BaseActivity
     val intent = Intent(getActivity, activity)

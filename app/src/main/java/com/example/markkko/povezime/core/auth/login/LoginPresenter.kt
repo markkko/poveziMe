@@ -43,11 +43,13 @@ class LoginPresenter @Inject constructor(private val schedulerProvider: Schedule
             loginInteractor.sendLoginInfoToServer(data)
                     .subscribeOn(schedulerProvider.backgroundThread())
                     .observeOn(schedulerProvider.mainThread())
+                    .doOnSuccess {
+                        Log.d("loginP", it.email)
+                        prefs.edit().putString(AppConstants.PREF_EMAIL, it.email).apply()
+                    }
                     .subscribe({ view.onSendInfoSuccess(it) })
                     { throwable -> Log.d("thr_send_info", throwable.toString()) }
         }
-
-
     }
 
     override fun clear() {

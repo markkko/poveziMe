@@ -1,6 +1,5 @@
 package com.example.markkko.povezime.core.base
 
-import android.content.pm.ServiceInfo
 import io.reactivex.disposables.CompositeDisposable
 
 

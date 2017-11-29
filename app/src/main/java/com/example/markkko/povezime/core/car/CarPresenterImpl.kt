@@ -3,7 +3,7 @@ package com.example.markkko.povezime.core.car
 import android.content.SharedPreferences
 import com.example.markkko.povezime.app.user.UserService
 import com.example.markkko.povezime.core.base.rxTransaction
-import com.example.markkko.povezime.core.models.dto.CarDTO
+import com.example.markkko.povezime.core.models.Car
 import com.example.markkko.povezime.core.util.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -17,7 +17,7 @@ class CarPresenterImpl @Inject constructor(private val carInteractor: CarInterac
 
     override lateinit var view: CarPresenter.View
 
-    override fun addCar(car: CarDTO) {
+    override fun addCar(car: Car) {
         rxTransaction {
             carInteractor.newCar(car)
                     .doOnSuccess { UserService.updateUser(prefs, it)  }

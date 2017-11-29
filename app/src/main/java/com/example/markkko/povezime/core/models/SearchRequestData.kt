@@ -10,5 +10,5 @@ data class SearchRequestData (var src: LatLng,
                          var luggage: Int,
                          var oneDay: Int,
                          var seats: Int,
-                         //var user: UserDTO,
+                         //var user: User,
                          var offerId: String? = null)

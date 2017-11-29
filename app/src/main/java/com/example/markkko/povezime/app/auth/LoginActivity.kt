@@ -7,15 +7,12 @@ import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseActivity
 import com.example.markkko.povezime.app.base.views.navigateToActivity
-import com.example.markkko.povezime.app.base.views.navigateToActivityAndClearStackWithExtras
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.home.HomeActivity
-import com.example.markkko.povezime.app.user.UserService
 import com.example.markkko.povezime.app.util.AppConstants
 import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.auth.login.ILoginMVP
-import com.example.markkko.povezime.core.models.dto.UserDTO
-import com.google.gson.Gson
+import com.example.markkko.povezime.core.models.User
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
@@ -32,9 +29,8 @@ class LoginActivity : BaseActivity(), ILoginMVP.View {
         showToast(R.string.login_failed)
     }
 
-    override fun onSendInfoSuccess(userDTO: UserDTO) {
-        prefs.edit().putString(AppConstants.PREF_EMAIL, userDTO.email).apply()
-        if (!userDTO.isCompletedInfo()) {
+    override fun onSendInfoSuccess(user: User) {
+        if (!user.isCompletedInfo()) {
             navigateToActivity(CompleteInfoActivity::class.java, Bundle())
             finishAffinity()
         }
@@ -105,7 +101,7 @@ class LoginActivity : BaseActivity(), ILoginMVP.View {
     private fun tryToLoginAuto() {
         val email = prefs.getString(AppConstants.PREF_EMAIL, "")
         val regId = prefs.getString(AppConstants.PREF_REG_ID, "")
-        if (email != "" && regId != "") {
+        if (!isNullOrEmpty(email)  && !isNullOrEmpty(regId)) {
             loginPresenter.sendInfoToServer(email, regId)
         }
     }
