@@ -179,7 +179,7 @@
                     android:textColor="@color/white"/>
 
                 <Button
-                    android:id="@+id/time_button"
+                    android:id="@+id/timeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_weight="1"
@@ -205,7 +205,7 @@
                     android:text="TextView"/>
 
                 <TextView
-                    android:id="@+id/time_label"
+                    android:id="@+id/timeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -251,7 +251,7 @@
                     android:paddingStart="10dp">
 
                     <EditText
-                        android:id="@+id/seats_label"
+                        android:id="@+id/seats"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -278,7 +278,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/addButton"
+                android:id="@+id/offerButton"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
                 android:layout_gravity="center"

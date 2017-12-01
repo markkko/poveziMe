@@ -12,3 +12,11 @@ fun formatPoint(point: LatLng) : String {
 
     return lat + "," + lng
 }
+
+fun formatPoint(point: HashMap<String, String>) : String {
+    val lat = point["lat"]?.toDouble()
+    val lng = point["lng"]?.toDouble()
+    if (lat != null && lng != null)
+        return formatPoint(LatLng(lat, lng))
+    return ""
+}

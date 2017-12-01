@@ -79,7 +79,8 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
                     }
                     valid
                 }*/
-                .subscribe { valid -> presenter.getSearchResults(SearchRequest.getDefaultRequest(presenter.me().id, dateString)) }
+                .subscribe { valid -> presenter.getSearchResults(createSearch()) }
+                //.subscribe { valid -> presenter.getSearchResults(SearchRequest.getDefaultRequest(presenter.me().id, dateString)) }
     }
 
 

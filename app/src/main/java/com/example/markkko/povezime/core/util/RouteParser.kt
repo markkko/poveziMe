@@ -1,11 +1,9 @@
 package com.example.markkko.povezime.core.util
 
 import com.google.android.gms.maps.model.LatLng
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 
 class RouteParser {
@@ -13,25 +11,22 @@ class RouteParser {
     /**
      * Receives a JSONObject and returns a list of lists containing latitude and longitude
      */
-    fun parse(jObject: JSONObject): List<List<HashMap<String, String>>> {
+    fun parse(jObject: JSONObject): List<List<HashMap<String, String>>>? {
 
         val routes = ArrayList<List<HashMap<String, String>>>()
-        val jRoutes: JSONArray
-        val jLegs: JSONArray
-        var jSteps: JSONArray
 
         try {
 
-            jRoutes = jObject.getJSONArray("routes")
+            val jRoutes = jObject.getJSONArray("routes")
 
-            jLegs = (jRoutes.get(0) as JSONObject).getJSONArray("legs")
+            val jLegs = (jRoutes.get(0) as JSONObject).getJSONArray("legs") ?: return null
 
             val path = ArrayList<HashMap<String, String>>()
 
             /** Traversing all legs  */
             for (j in 0 until jLegs.length()) {
 
-                jSteps = (jLegs.get(j) as JSONObject).getJSONArray("steps")
+                val jSteps = (jLegs.get(j) as JSONObject).getJSONArray("steps")
 
                 /** Traversing all steps  */
                 for (k in 0 until jSteps.length()) {

@@ -1,31 +1,34 @@
 package com.example.markkko.povezime.app.home.offer
 
+import android.app.TimePickerDialog
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import butterknife.OnClick
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
-import com.example.markkko.povezime.app.base.views.navigateToActivity
+import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.BaseHomeFragment
+import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.offer.IOfferMVP
+import com.example.markkko.povezime.core.models.OfferRequest
 import com.example.markkko.povezime.core.models.OfferResult
 import com.example.markkko.povezime.core.models.Route
-import com.google.android.gms.common.api.ResultCallback
+import com.example.markkko.povezime.core.util.convertTimeToString
 import com.google.android.gms.location.places.Place
-import com.google.android.gms.location.places.PlaceBuffer
 import com.google.android.gms.location.places.PlaceBufferResponse
-import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.OnCompleteListener
+import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_offer.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -75,9 +78,24 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
     lateinit var mapFragment: SupportMapFragment
 
+    private var timeString: String? = null
+
     /**********************
      * Callbacks
      ***********************/
+
+    private var timeListener: View.OnClickListener = View.OnClickListener {
+        val calendar = Calendar.getInstance()
+        val hh = calendar.get(Calendar.HOUR_OF_DAY)
+        val mm = calendar.get(Calendar.MINUTE)
+
+        val datePicker = TimePickerDialog(activity, TimePickerDialog.OnTimeSetListener { _, hours, minutes ->
+            timeString = convertTimeToString(hours, minutes)
+            timeLabel.text = timeString
+
+        }, hh, mm, true)
+        datePicker.show()
+    }
 
     @OnClick(R.id.acrossButton)
     fun onClickAcross() {
@@ -126,6 +144,36 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         opt1.onItemClickListener = mAutocompleteClickListenerOpt1
         opt2.onItemClickListener = mAutocompleteClickListenerOpt2
         opt3.onItemClickListener = mAutocompleteClickListenerOpt3
+
+        timeButton.setOnClickListener(timeListener)
+
+        RxView.clicks(offerButton)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                 .filter {
+                     var valid = true
+                     /*if (src == null) {
+                         fromAutocomplete.error = getString(R.string.empty_from)
+                         valid = false
+                     }
+                     if (dst == null) {
+                         toAutocomplete.error = getString(R.string.empty_to)
+                         valid = false
+                     }
+                     if (isNullOrEmpty(dateString)) {
+                         dateLabel.error = getString(R.string.empty_date)
+                         valid = false
+                     }
+                     if (isNullOrEmpty(seats)) {
+                         seats.error = getString(R.string.empty_seats)
+                         valid = false
+                     }*/
+                     if (presenter.route == null) {
+                         showToast("Molimo uzaberite polaznu i krajnju tacku")
+                         valid = false
+                     }
+                     valid
+                 }
+                .subscribe { valid -> presenter.offerRide(createOffer()) }
     }
 
     override fun bind() {
@@ -210,7 +258,7 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         places.release()
     }
 
-    private val mUpdatePlaceDetailsCallbackOpt2 = OnCompleteListener<PlaceBufferResponse>  { task ->
+    private val mUpdatePlaceDetailsCallbackOpt2 = OnCompleteListener<PlaceBufferResponse> { task ->
         val places = task.result
         val place = places[0]
 
@@ -303,6 +351,15 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         val placeResult = mGeoDataClient.getPlaceById(placeId)
         placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackOpt3)
     }
+
+    private fun createOffer(): OfferRequest {
+        val offer = OfferRequest("2017-12-01", "13:25:00", presenter.route!!.toBackendString(),
+                1, 2, 2, presenter.me().id)
+        /*val offer = OfferRequest(dateString!!, timeString!!, presenter.route!!.toBackendString(),
+                1, getIntSafe(seats), getIntSafe(luggage), presenter.me().id)*/
+        return offer
+    }
+
 
     /**********************
      * Companion

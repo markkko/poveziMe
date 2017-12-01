@@ -12,14 +12,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import io.reactivex.disposables.CompositeDisposable
 import org.json.JSONObject
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 
 
 class OfferPresenter @Inject constructor(private val offerInteractor: OfferInteractor,
                                          private val schedulerProvider: SchedulerProvider)
-    : IOfferMVP.Presenter{
+    : IOfferMVP.Presenter {
 
 
     override lateinit var view: IOfferMVP.View
@@ -33,7 +32,12 @@ class OfferPresenter @Inject constructor(private val offerInteractor: OfferInter
                 .subscribeOn(schedulerProvider.backgroundThread())
                 .doOnSuccess { route = parseRoute(it) }
                 .observeOn(schedulerProvider.mainThread())
-                .subscribe({view.onRouteFetched(route!!)}, {view.showMessage("Route cannot be fetched")})
+                .subscribe(
+                        {
+                            if (route != null) view.onRouteFetched(route!!)
+                            else view.showMessage("Route cannot be fetched")
+                        },
+                        { view.showMessage("Route cannot be fetched") })
     }
 
     override fun offerRide(offer: OfferRequest) {
@@ -41,56 +45,54 @@ class OfferPresenter @Inject constructor(private val offerInteractor: OfferInter
             offerInteractor.offerRide(offer)
                     .subscribeOn(schedulerProvider.backgroundThread())
                     .observeOn(schedulerProvider.mainThread())
-                    .subscribe({view?.onOfferSuccess(it)}, {view?.showMessage(it.message!!)})
+                    .subscribe({ view.onOfferSuccess(it) }, { view.showMessage(it.message!!) })
         }
     }
 
-    private fun parseRoute(route: String) : Route? {
-        val jObject: JSONObject
-        var routes: List<List<HashMap<String, String>>>
-
+    private fun parseRoute(route: String): Route? {
         try {
-            jObject = JSONObject(route)
+            val jObject = JSONObject(route)
             Log.d("ParserTask", route)
             val parser = RouteParser()
             Log.d("ParserTask", parser.toString())
 
             // Starts parsing data
-            routes = parser.parse(jObject)
-            Log.d("ParserTask", "Executing routes")
-            Log.d("ParserTask", routes.toString())
-            //getSteps();
+            val routes = parser.parse(jObject)
 
-            var points: ArrayList<LatLng>
-            val lineOptions = PolylineOptions()
+            routes?.let {
+                Log.d("ParserTask", "Executing routes")
+                Log.d("ParserTask", routes.toString())
+                //getSteps();
 
-            // Traversing through all the routes
-            for (i in routes.indices) {
-                points = ArrayList()
+                var points: ArrayList<LatLng>
+                val lineOptions = PolylineOptions()
 
-                // Fetching i-th route
-                val path = routes[i]
+                // Traversing through all the routes
+                for (i in it.indices) {
+                    points = ArrayList()
 
-                // Fetching all the points in i-th route
-                for (j in path.indices) {
-                    val point = path[j]
+                    // Fetching i-th route
+                    val path = it[i]
 
-                    val lat = java.lang.Double.parseDouble(point["lat"])
-                    val lng = java.lang.Double.parseDouble(point["lng"])
-                    val position = LatLng(lat, lng)
-                    points.add(position)
+                    // Fetching all the points in i-th route
+                    for (j in path.indices) {
+                        val point = path[j]
+
+                        val lat = java.lang.Double.parseDouble(point["lat"])
+                        val lng = java.lang.Double.parseDouble(point["lng"])
+                        val position = LatLng(lat, lng)
+                        points.add(position)
+                    }
+
+                    // Adding all the points in the route to LineOptions
+                    lineOptions.addAll(points)
+                    lineOptions.width(10f)
+                    lineOptions.color(Color.RED)
+                    Log.d("onPostExecute", "onPostExecute lineoptions decoded")
                 }
 
-                // Adding all the points in the route to LineOptions
-                lineOptions.addAll(points)
-                lineOptions.width(10f)
-                lineOptions.color(Color.RED)
-                Log.d("onPostExecute", "onPostExecute lineoptions decoded")
+                return Route(routes[0], lineOptions)
             }
-
-            val route = Route(routes[0], lineOptions)
-            return route
-
         } catch (e: Exception) {
             Log.d("ParserTask", e.toString())
             e.printStackTrace()
