@@ -1,6 +1,7 @@
 package com.example.markkko.povezime.app.home
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
@@ -12,10 +13,11 @@ import com.example.markkko.povezime.app.base.views.BaseFragment
 import com.example.markkko.povezime.core.home.PlaceAutocompleteAdapter
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.ResultCallback
-import com.google.android.gms.location.places.PlaceBuffer
-import com.google.android.gms.location.places.Places
+import com.google.android.gms.location.places.GeoDataClient
+import com.google.android.gms.location.places.Place
+import com.google.android.gms.location.places.PlaceBufferResponse
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.OnCompleteListener
 import java.util.*
 import javax.inject.Inject
 
@@ -27,7 +29,7 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
      *********************/
 
     @Inject
-    lateinit var mGoogleApiClient: GoogleApiClient
+    lateinit var mGeoDataClient: GeoDataClient
 
     @Inject
     lateinit var mAutocompleteAdapter: PlaceAutocompleteAdapter
@@ -53,36 +55,32 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
      * Callbacks
      **********************/
 
-    private val mUpdatePlaceDetailsCallbackFrom = ResultCallback<PlaceBuffer> { places ->
-        if (!places.status.isSuccess) {
-            places.release()
-            return@ResultCallback
-        }
-        onFromUpdateInternal(places)
+    private val mUpdatePlaceDetailsCallbackFrom = OnCompleteListener<PlaceBufferResponse> { task ->
+        val places = task.result
+        val place = places[0]
+        onFromUpdateInternal(place)
+        places.release()
     }
-    private val mUpdatePlaceDetailsCallbackTo = ResultCallback<PlaceBuffer> { places ->
-        if (!places.status.isSuccess) {
-            places.release()
-            return@ResultCallback
-        }
-        onToUpdateInternal(places)
+    private val mUpdatePlaceDetailsCallbackTo = OnCompleteListener<PlaceBufferResponse> { task ->
+        val places = task.result
+        val place = places[0]
+        onToUpdateInternal(place)
+        places.release()
     }
 
     private val mAutocompleteClickListenerFrom = AdapterView.OnItemClickListener { parent, view, position, id ->
         val item = mAutocompleteAdapter.getItem(position)
-        val placeId = item!!.placeId
+        val placeId = item.placeId
 
-        val placeResult = Places.GeoDataApi
-                .getPlaceById(mGoogleApiClient, placeId)
-        placeResult.setResultCallback(mUpdatePlaceDetailsCallbackFrom)
+        val placeResult = mGeoDataClient.getPlaceById(placeId)
+        placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackFrom)
     }
     private val mAutocompleteClickListenerTo = AdapterView.OnItemClickListener { _, view, position, id ->
         val item = mAutocompleteAdapter.getItem(position)
-        val placeId = item!!.placeId
+        val placeId = item.placeId
 
-        val placeResult = Places.GeoDataApi
-                .getPlaceById(mGoogleApiClient, placeId)
-        placeResult.setResultCallback(mUpdatePlaceDetailsCallbackTo)
+        val placeResult = mGeoDataClient.getPlaceById(placeId)
+        placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackTo)
     }
 
     private var dateListener: View.OnClickListener = View.OnClickListener {
@@ -108,7 +106,6 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
      **********************/
 
     override fun prepareData() {
-        mGoogleApiClient.connect()
         fromAutocomplete.setAdapter<PlaceAutocompleteAdapter>(mAutocompleteAdapter)
         toAutocomplete.setAdapter<PlaceAutocompleteAdapter>(mAutocompleteAdapter)
         dateLabel.text = ""
@@ -122,14 +119,14 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
 
 
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
-
+        Log.d("conectionFailed", connectionResult.errorMessage)
     }
 
     /**********************
      * Internal
      **********************/
 
-    abstract fun onFromUpdateInternal(places: PlaceBuffer)
+    abstract fun onFromUpdateInternal(place: Place)
 
-    abstract fun onToUpdateInternal(places: PlaceBuffer)
+    abstract fun onToUpdateInternal(place: Place)
 }

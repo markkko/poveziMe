@@ -32,6 +32,7 @@ class ClientModule {
                 //.addInterceptor(retryInterceptor)
                 //.cache(cache)
                 .connectTimeout(networkTimeoutInSeconds.toLong(), TimeUnit.SECONDS)
+                .readTimeout(networkTimeoutInSeconds.toLong(), TimeUnit.SECONDS)
 
         //show logs if app is in Debug mode
         //if (isDebug)

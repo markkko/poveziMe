@@ -1,16 +1,16 @@
 package com.example.markkko.povezime.core.data.apis
 
-import com.example.markkko.povezime.core.models.SearchRequestData
-import com.example.markkko.povezime.core.models.SearchResultData
+import com.example.markkko.povezime.core.models.SearchRequest
+import com.example.markkko.povezime.core.models.SearchResult
 
 import io.reactivex.Single
 import retrofit2.http.Body
-import retrofit2.http.GET
+import retrofit2.http.POST
 
 
 interface SearchApi {
 
-    @GET("ride/search")
-    fun getSearchResults(@Body data: SearchRequestData): Single<List<SearchResultData>>
+    @POST("search/ride")
+    fun getSearchResults(@Body data: SearchRequest): Single<List<SearchResult>>
 
 }

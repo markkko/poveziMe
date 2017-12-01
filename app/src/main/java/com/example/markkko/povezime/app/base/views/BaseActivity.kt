@@ -19,6 +19,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        create(savedInstanceState)
+    }
+
+    open protected fun create(savedInstanceState: Bundle?) {
         setContentView(baseLayoutId)
         setupActionBar()
         layoutInflater.inflate(layoutId,  findViewById(R.id.frame_holder))

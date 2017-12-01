@@ -2,6 +2,7 @@ package com.example.markkko.povezime.app.home.offer
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import butterknife.OnClick
@@ -12,16 +13,18 @@ import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.BaseHomeFragment
 import com.example.markkko.povezime.core.home.offer.IOfferMVP
 import com.example.markkko.povezime.core.models.OfferResult
+import com.example.markkko.povezime.core.models.Route
 import com.google.android.gms.common.api.ResultCallback
+import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.PlaceBuffer
+import com.google.android.gms.location.places.PlaceBufferResponse
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.google.android.gms.tasks.OnCompleteListener
 import kotlinx.android.synthetic.main.fragment_offer.*
 import javax.inject.Inject
 
@@ -39,6 +42,12 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
     override fun onOfferSuccess(results: List<OfferResult>) {
 
+    }
+
+    override fun onRouteFetched(route: Route) {
+        val lineOptions = route.lineOptions
+        mapView.addPolyline(lineOptions)
+        fixZoom(lineOptions)
     }
 
     override fun onMapReady(p0: GoogleMap?) {
@@ -128,13 +137,23 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     }
 
     /**********************
+     * Internal
+     ***********************/
+
+    private fun fixZoom(route: PolylineOptions) {
+        val points = route.points // route is instance of PolylineOptions
+        val bc = LatLngBounds.Builder()
+        for (item in points) {
+            bc.include(item)
+        }
+        mapView.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), 50))
+    }
+
+    /**********************
      * Point callbacks
      ***********************/
 
-    override fun onFromUpdateInternal(places: PlaceBuffer) {
-        // Get the Place object from the buffer.
-        val place = places.get(0)
-
+    override fun onFromUpdateInternal(place: Place) {
         addresses[0] = place.latLng
 
         mapView.clear()
@@ -144,16 +163,15 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         mapView.addMarker(options)
         mapView.moveCamera(CameraUpdateFactory.newLatLng(addresses[0]))
         addresses[1]?.let {
-            options.position(it)
-            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            val options2 = MarkerOptions()
+            options2.position(it)
+            options2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
             mapView.addMarker(options)
             presenter.getRoute(addresses)
         }
-        places.release()
     }
 
-    override fun onToUpdateInternal(places: PlaceBuffer) {
-        val place = places.get(0)
+    override fun onToUpdateInternal(place: Place) {
         addresses[1] = place.latLng
         mapView.clear()
         val options = MarkerOptions()
@@ -161,21 +179,17 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
         mapView.addMarker(options)
         addresses[0]?.let {
-            options.position(it)
-            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            val options2 = MarkerOptions()
+            options2.position(it)
+            options2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             mapView.addMarker(options)
             presenter.getRoute(addresses)
         }
-        places.release()
     }
 
-    private val mUpdatePlaceDetailsCallbackOpt1 = ResultCallback<PlaceBuffer> { places ->
-        if (!places.status.isSuccess) {
-            places.release()
-            return@ResultCallback
-        }
-        // Get the Place object from the buffer.
-        val place = places.get(0)
+    private val mUpdatePlaceDetailsCallbackOpt1 = OnCompleteListener<PlaceBufferResponse> { task ->
+        val places = task.result
+        val place = places[0]
 
         addresses[2] = place.latLng
 
@@ -196,14 +210,9 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         places.release()
     }
 
-    private val mUpdatePlaceDetailsCallbackOpt2 = ResultCallback<PlaceBuffer> { places ->
-        if (!places.status.isSuccess) {
-
-            places.release()
-            return@ResultCallback
-        }
-        // Get the Place object from the buffer.
-        val place = places.get(0)
+    private val mUpdatePlaceDetailsCallbackOpt2 = OnCompleteListener<PlaceBufferResponse>  { task ->
+        val places = task.result
+        val place = places[0]
 
         addresses[3] = place.latLng
         opt3Input.visibility = View.VISIBLE
@@ -223,13 +232,9 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         places.release()
     }
 
-    private val mUpdatePlaceDetailsCallbackOpt3 = ResultCallback<PlaceBuffer> { places ->
-        if (!places.status.isSuccess) {
-            places.release()
-            return@ResultCallback
-        }
-        // Get the Place object from the buffer.
-        val place = places.get(0)
+    private val mUpdatePlaceDetailsCallbackOpt3 = OnCompleteListener<PlaceBufferResponse> { task ->
+        val places = task.result
+        val place = places[0]
 
         addresses[4] = place.latLng
 
@@ -276,30 +281,27 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     }
 
     private val mAutocompleteClickListenerOpt1 = AdapterView.OnItemClickListener { parent, view, position, id ->
-        val item = mAutocompleteAdapter!!.getItem(position)
-        val placeId = item!!.placeId
+        val item = mAutocompleteAdapter.getItem(position)
+        val placeId = item.placeId
 
-        val placeResult = Places.GeoDataApi
-                .getPlaceById(mGoogleApiClient, placeId)
-        placeResult.setResultCallback(mUpdatePlaceDetailsCallbackOpt1)
+        val placeResult = mGeoDataClient.getPlaceById(placeId)
+        placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackOpt1)
     }
 
     private val mAutocompleteClickListenerOpt2 = AdapterView.OnItemClickListener { parent, view, position, id ->
-        val item = mAutocompleteAdapter!!.getItem(position)
-        val placeId = item!!.placeId
+        val item = mAutocompleteAdapter.getItem(position)
+        val placeId = item.placeId
 
-        val placeResult = Places.GeoDataApi
-                .getPlaceById(mGoogleApiClient, placeId)
-        placeResult.setResultCallback(mUpdatePlaceDetailsCallbackOpt2)
+        val placeResult = mGeoDataClient.getPlaceById(placeId)
+        placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackOpt2)
     }
 
     private val mAutocompleteClickListenerOpt3 = AdapterView.OnItemClickListener { parent, view, position, id ->
-        val item = mAutocompleteAdapter!!.getItem(position)
-        val placeId = item!!.placeId
+        val item = mAutocompleteAdapter.getItem(position)
+        val placeId = item.placeId
 
-        val placeResult = Places.GeoDataApi
-                .getPlaceById(mGoogleApiClient, placeId)
-        placeResult.setResultCallback(mUpdatePlaceDetailsCallbackOpt3)
+        val placeResult = mGeoDataClient.getPlaceById(placeId)
+        placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackOpt3)
     }
 
     /**********************

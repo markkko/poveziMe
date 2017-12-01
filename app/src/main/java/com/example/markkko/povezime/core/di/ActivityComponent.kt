@@ -12,7 +12,6 @@ interface ActivityComponent {
 
     @Subcomponent.Builder
     interface Builder {
-
         fun featuresModule(featuresModule: FeaturesModule): Builder
         fun build(): ActivityComponent
     }

@@ -1,19 +1,33 @@
 package com.example.markkko.povezime.core.home.search
 
+import com.example.markkko.povezime.core.base.rxTransaction
+import com.example.markkko.povezime.core.models.SearchRequest
+import com.example.markkko.povezime.core.models.User
+import com.example.markkko.povezime.core.util.GeocoderUtils
+import com.example.markkko.povezime.core.util.SchedulerProvider
 
-import com.example.markkko.povezime.core.base.BasePresenter
-import com.example.markkko.povezime.core.base.BaseView
-import com.example.markkko.povezime.core.models.SearchRequestData
-import com.example.markkko.povezime.core.models.SearchResultData
+import javax.inject.Inject
 
-interface SearchPresenter : BasePresenter {
+import io.reactivex.disposables.CompositeDisposable
 
-    fun getSearchResults(data: SearchRequestData)
+class SearchPresenter @Inject constructor(private val schedulerProvider: SchedulerProvider,
+                                          private val searchInteractor: SearchInteractor) : ISearchMVP.Presenter {
 
-    var view: View?
+    override var disposables: CompositeDisposable = CompositeDisposable()
 
-    interface View : BaseView {
-        fun showResults(results: List<SearchResultData>)
+    override lateinit var view: ISearchMVP.View
+
+    override fun getSearchResults(data: SearchRequest) {
+        rxTransaction {
+            searchInteractor.getSearchResults(data)
+                    .subscribeOn(schedulerProvider.backgroundThread())
+                    .observeOn(schedulerProvider.mainThread())
+                    .subscribe({ view.showResults(it) }) { t -> view.showMessage("Server problem") }
+        }
     }
 
+    override fun me(): User = searchInteractor.me()
+
+    override fun clear() {
+    }
 }
