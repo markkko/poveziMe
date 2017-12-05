@@ -68,7 +68,7 @@ class AddCarActivity : BaseFragmentedActivity() {
                     }
                     .subscribe { _ ->
                         presenter.addCar(
-                                Car(brand = brand.text.toString(),
+                                Car(make = brand.text.toString(),
                                         model = subline.text.toString(),
                                         seats = cap.text.toString().toInt(),
                                         userId = me.id,

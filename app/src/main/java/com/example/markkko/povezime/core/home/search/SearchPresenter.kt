@@ -11,7 +11,7 @@ import javax.inject.Inject
 import io.reactivex.disposables.CompositeDisposable
 
 class SearchPresenter @Inject constructor(private val schedulerProvider: SchedulerProvider,
-                                          private val searchInteractor: SearchInteractor) : ISearchMVP.Presenter {
+                                          private val searchInteractor: ISearchMVP.Interactor) : ISearchMVP.Presenter {
 
     override var disposables: CompositeDisposable = CompositeDisposable()
 

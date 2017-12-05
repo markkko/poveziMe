@@ -45,3 +45,11 @@ fun convertTimeToString(hours: Int, minutes: Int) : String{
     return "$newHours:$newMinutes:00"
 }
 
+fun getTodayString() : String {
+    val fmt = DateTimeFormat.forPattern("yyyy-MM-dd")
+    val today = DateTime()
+    //return "${today.year()}-${today.monthOfYear()}-${today.dayOfMonth()}"
+    return fmt.print(today)
+}
+
+

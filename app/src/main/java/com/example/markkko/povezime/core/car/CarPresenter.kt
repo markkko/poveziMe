@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
-class CarPresenter @Inject constructor(private val carInteractor: CarInteractor,
+class CarPresenter @Inject constructor(private val carInteractor: ICarMVP.Interactor,
                                        private val schedulerProvider: SchedulerProvider,
                                        private val prefs: SharedPreferences) : ICarMVP.Presenter{
 
@@ -21,7 +21,6 @@ class CarPresenter @Inject constructor(private val carInteractor: CarInteractor,
     override fun addCar(car: Car) {
         rxTransaction {
             carInteractor.newCar(car)
-                    .doOnSuccess { UserService.updateUser(prefs, it)  }
                     .subscribeOn(schedulerProvider.backgroundThread())
                     .observeOn(schedulerProvider.mainThread())
                     .subscribe({view.onCarAdded()}, {t -> t.message?.let { view.showMessage(it) } })

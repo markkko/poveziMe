@@ -26,7 +26,7 @@ class Route (val fullRoute: List<HashMap<String, String>>,
             str.append(formatPoint(it))
             str.append(" - ")
         }
-        str.delete(str.lastIndex-3, str.lastIndex)
-        return str.toString()
+
+        return str.substring(0, str.length-3)
     }
 }

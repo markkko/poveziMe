@@ -3,6 +3,7 @@ package com.example.markkko.povezime.core.home.offer
 import android.graphics.Color
 import android.util.Log
 import com.example.markkko.povezime.core.base.rxTransaction
+import com.example.markkko.povezime.core.models.Car
 import com.example.markkko.povezime.core.models.OfferRequest
 import com.example.markkko.povezime.core.models.Route
 import com.example.markkko.povezime.core.models.User
@@ -16,7 +17,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class OfferPresenter @Inject constructor(private val offerInteractor: OfferInteractor,
+class OfferPresenter @Inject constructor(private val offerInteractor: IOfferMVP.Interactor,
                                          private val schedulerProvider: SchedulerProvider)
     : IOfferMVP.Presenter {
 
@@ -52,18 +53,13 @@ class OfferPresenter @Inject constructor(private val offerInteractor: OfferInter
     private fun parseRoute(route: String): Route? {
         try {
             val jObject = JSONObject(route)
-            Log.d("ParserTask", route)
             val parser = RouteParser()
-            Log.d("ParserTask", parser.toString())
 
             // Starts parsing data
             val routes = parser.parse(jObject)
 
             routes?.let {
-                Log.d("ParserTask", "Executing routes")
-                Log.d("ParserTask", routes.toString())
                 //getSteps();
-
                 var points: ArrayList<LatLng>
                 val lineOptions = PolylineOptions()
 
@@ -102,6 +98,8 @@ class OfferPresenter @Inject constructor(private val offerInteractor: OfferInter
     }
 
     override fun me(): User = offerInteractor.me()
+
+    override fun getCars(): List<Car> = me().cars
 
     override fun clear() {
 

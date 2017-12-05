@@ -6,10 +6,12 @@ import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.home.BaseHomeFragment
 import com.example.markkko.povezime.app.util.formatPoint
+import com.example.markkko.povezime.app.util.getIntSafe
 import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.search.ISearchMVP
 import com.example.markkko.povezime.core.models.SearchRequest
 import com.example.markkko.povezime.core.models.SearchResult
+import com.example.markkko.povezime.core.util.getTodayString
 import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.PlaceBuffer
 import com.jakewharton.rxbinding2.view.RxView
@@ -80,7 +82,7 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
                     valid
                 }*/
                 .subscribe { valid -> presenter.getSearchResults(createSearch()) }
-                //.subscribe { valid -> presenter.getSearchResults(SearchRequest.getDefaultRequest(presenter.me().id, dateString)) }
+                //.subscribe { valid -> presenter.getSearchResults(SearchRequest.getDefaultRequest(presenter.me().id, getTodayString())) }
     }
 
 
@@ -107,7 +109,7 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
 
     private fun createSearch(): SearchRequest {
         val search =  SearchRequest(presenter.me().id, from = formatPoint(src!!), to = formatPoint(dst!!), date = dateString!!, luggage = if (luggage.isChecked) 1 else 0,
-                seats = seats.text.toString().toInt(), oneDay = if (oneDay.isChecked) 1 else 0)
+                seats = getIntSafe(seats), oneDay = if (oneDay.isChecked) 1 else 0)
         Log.d("searchRequest", search.toString())
         return search
     }

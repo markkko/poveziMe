@@ -11,6 +11,7 @@ fun formatPoint(point: LatLng) : String {
     val lng = df.format(point.longitude)
 
     return lat + "," + lng
+    //return "${point.latitude},${point.longitude}"
 }
 
 fun formatPoint(point: HashMap<String, String>) : String {

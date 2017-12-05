@@ -2,21 +2,21 @@ package com.example.markkko.povezime.app.home.offer
 
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import butterknife.OnClick
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.BaseHomeFragment
-import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.offer.IOfferMVP
 import com.example.markkko.povezime.core.models.OfferRequest
 import com.example.markkko.povezime.core.models.OfferResult
 import com.example.markkko.povezime.core.models.Route
 import com.example.markkko.povezime.core.util.convertTimeToString
+import com.example.markkko.povezime.core.util.getTodayString
 import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.PlaceBufferResponse
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -117,6 +117,8 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     override fun prepareData() {
         super.prepareData()
 
+        timeLabel.text = ""
+
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
@@ -134,6 +136,13 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
             addCarLayout.visibility = View.VISIBLE
             mainScrollView.visibility = View.GONE
         } else {
+            val spinnerValues = java.util.ArrayList<String>()
+            user.cars.forEach { spinnerValues.add(it.make + " " + it.model) }
+
+            val spinnerAdapter = ArrayAdapter(activity, R.layout.spinner_item_simple, spinnerValues)
+            spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+            carSpinner.adapter = spinnerAdapter
+
             mainScrollView.visibility = View.VISIBLE
             addCarLayout.visibility = View.GONE
         }
@@ -353,8 +362,8 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     }
 
     private fun createOffer(): OfferRequest {
-        val offer = OfferRequest("2017-12-01", "13:25:00", presenter.route!!.toBackendString(),
-                1, 2, 2, presenter.me().id)
+        val offer = OfferRequest(getTodayString(), "13:25:00", presenter.route!!.toBackendString(),
+                3, 2, 2, presenter.me().id)
         /*val offer = OfferRequest(dateString!!, timeString!!, presenter.route!!.toBackendString(),
                 1, getIntSafe(seats), getIntSafe(luggage), presenter.me().id)*/
         return offer

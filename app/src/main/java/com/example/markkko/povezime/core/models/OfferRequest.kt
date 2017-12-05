@@ -14,4 +14,5 @@ class OfferRequest(val date: String,
     override fun toString(): String {
         return "route: $route, date: $date, car_id:$carId time:$time, seats:$seats, luggage:$luggage"
     }
+
 }

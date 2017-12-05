@@ -11,5 +11,8 @@ class UserRepository @Inject constructor() {
 
     lateinit var user: User
 
-    fun addCar(car: Car) = user.cars.add(car)
+    fun addCar(car: Car) {
+        user.cars.add(car)
+        user.cars.sortBy { it.make.toLowerCase() }
+    }
 }

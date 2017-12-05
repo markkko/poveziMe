@@ -2,7 +2,6 @@ package com.example.markkko.povezime.core.auth.login
 
 
 import com.example.markkko.povezime.app.user.UserRepository
-import com.example.markkko.povezime.core.auth.LoginResponse
 import com.example.markkko.povezime.core.data.apis.UserApi
 import com.example.markkko.povezime.core.models.User
 import io.reactivex.Single
@@ -14,6 +13,7 @@ class LoginInteractor @Inject constructor(private val userApi: UserApi,
 
     override fun sendLoginInfoToServer(data: LoginPostData): Single<User> {
         return userApi.sendInfo(data)
+                .doOnSuccess { it.cars.sortBy { it.make.toLowerCase() } }
                 .doOnSuccess { userRepository.user = it }
     }
 

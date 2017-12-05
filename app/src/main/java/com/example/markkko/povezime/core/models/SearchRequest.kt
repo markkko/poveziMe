@@ -1,5 +1,6 @@
 package com.example.markkko.povezime.core.models
 
+import com.example.markkko.povezime.R.string.date
 import com.google.gson.annotations.SerializedName
 
 
@@ -21,6 +22,7 @@ class SearchRequest(@SerializedName("user_id") val userId: Long,
 
     companion object {
         fun getDefaultRequest(id: Long, date: String) =
-                SearchRequest(id, from = "44.872", to = "44.786", date = date, luggage = 0, oneDay = 1, seats = 2)
+                SearchRequest(id, from = "44.872,18.81", to = "44.786,20.448", date = date, luggage = 0, oneDay = 1, seats = 2)
+
     }
 }

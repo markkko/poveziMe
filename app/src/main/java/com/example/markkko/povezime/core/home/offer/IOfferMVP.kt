@@ -1,6 +1,7 @@
 package com.example.markkko.povezime.core.home.offer
 
 import com.example.markkko.povezime.core.base.*
+import com.example.markkko.povezime.core.models.Car
 import com.example.markkko.povezime.core.models.OfferRequest
 import com.example.markkko.povezime.core.models.OfferResult
 import com.example.markkko.povezime.core.models.Route
@@ -28,13 +29,15 @@ interface IOfferMVP {
 
         fun offerRide(offer: OfferRequest)
 
+        fun getCars(): List<Car>
+
     }
 
     interface Interactor: BaseUserInteractor {
 
         fun offerRide(offer: OfferRequest) : Single<List<OfferResult>>
 
-
+        fun getRoute(addresses: Array<LatLng?>): Single<String>
     }
 
 }
