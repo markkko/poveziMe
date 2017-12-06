@@ -38,7 +38,7 @@ class CompleteInfoFragment: BaseFragment(), ICompleteInfoMVP.View  {
 
     override fun onInfoCompleted(user: User) {
         UserService.user = user
-        navigateToActivityAndClearStackWithExtras(HomeActivity::class.java, Bundle())
+        baseActivity.navigateToActivityAndClearStackWithExtras(HomeActivity::class.java, Bundle())
         activity.finish()
     }
 

@@ -1,4 +1,4 @@
-package com.gazindo.android.android.base.adapters
+package com.example.markkko.povezime.app.base.views.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import butterknife.ButterKnife
-import javax.inject.Inject
 
 
 abstract class RecyclerItemAdapter<T : Any, E : BaseViewHolder>(items: List<T> = ArrayList(), private val layoutId: Int, private val context: Context) : RecyclerView.Adapter<E>() {

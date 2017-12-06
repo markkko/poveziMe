@@ -11,6 +11,7 @@ import butterknife.BindView
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.base.views.BaseFragment
 import com.example.markkko.povezime.core.home.PlaceAutocompleteAdapter
+import com.example.markkko.povezime.core.util.GeocoderUtils
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.places.GeoDataClient
@@ -29,6 +30,9 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
      *********************/
 
     @Inject
+    lateinit var geocoder: GeocoderUtils
+
+    @Inject
     lateinit var mGeoDataClient: GeoDataClient
 
     @Inject
@@ -40,7 +44,7 @@ abstract class BaseHomeFragment : BaseFragment(), GoogleApiClient.OnConnectionFa
     @BindView(R.id.to_autocomplete_places)
     lateinit var toAutocomplete: AutoCompleteTextView
 
-    @BindView(R.id.dateButto)
+    @BindView(R.id.dateButton)
     lateinit var dateButton: Button
 
     @BindView(R.id.dateLabel)

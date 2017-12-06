@@ -1,6 +1,9 @@
 package com.example.markkko.povezime.core.home.offer
 
 import com.example.markkko.povezime.app.di.GoogleApiModule
+import com.example.markkko.povezime.core.home.search.ISearchMVP
+import com.example.markkko.povezime.core.home.search.SearchInteractor
+import com.example.markkko.povezime.core.home.search.SearchPresenter
 import dagger.Module
 import dagger.Provides
 

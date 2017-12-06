@@ -21,14 +21,14 @@ class AddCarActivity : BaseFragmentedActivity() {
     class AddCarFragment : BaseFragment(), ICarMVP.View {
 
         override fun showMessage(message: String) {
-            showToast(message)
+            baseActivity.showToast(message)
         }
 
         override fun showOfflineMessage(isCritical: Boolean) {
         }
 
         override fun onCarAdded() {
-            showToast(R.string.car_added_successfully)
+            baseActivity.showToast(R.string.car_added_successfully)
             activity.finish()
         }
 

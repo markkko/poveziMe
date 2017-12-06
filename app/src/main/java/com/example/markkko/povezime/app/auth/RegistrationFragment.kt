@@ -34,7 +34,7 @@ class RegistrationFragment : BaseFragment(), IRegistrationMVP.View {
     override fun showOfflineMessage(isCritical: Boolean) {}
 
     override fun onRegistrationComplete(results: AuthResult) {
-        navigateToActivity(LoginActivity::class.java)
+        baseActivity.navigateToActivity(LoginActivity::class.java)
         activity.finishAffinity()
     }
 

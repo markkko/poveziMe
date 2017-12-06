@@ -2,6 +2,7 @@ package com.example.markkko.povezime.app.base.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.widget.Toast
 
 
@@ -33,50 +34,20 @@ fun BaseActivity.navigateToActivity(activity: Class<*>, bundle: Bundle) {
     startActivity(intent)
 }
 
+fun BaseActivity.navigateToActivity(activity: Class<*>) {
+    val intent = Intent(this, activity)
+    startActivity(intent)
+}
+
 fun BaseActivity.navigateToActivityForResult(activity: Class<*>, requestCode: Int) {
     val intent = Intent(this, activity)
     startActivityForResult(intent, requestCode)
 }
 
-fun BaseFragment.showToast(message: String) {
-    (activity as BaseActivity).showToast(message)
-}
-
-fun BaseFragment.showToast(stringId: Int) {
-    (activity as BaseActivity).showToast(stringId)
-}
-
-fun BaseFragment.navigateToActivityAndClearStackWithExtras(activity: Class<*>, bundle: Bundle) {
-    val getActivity = getActivity() as BaseActivity
-    val intent = Intent(getActivity, activity)
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-    intent.putExtras(bundle)
-    startActivity(intent)
-}
-
-fun BaseFragment.navigateToActivityAndFinish(activity: Class<*>, bundle: Bundle) {
-    val getActivity = getActivity() as BaseActivity
-    val intent = Intent(getActivity, activity)
-    intent.putExtras(bundle)
-    startActivity(intent)
-    getActivity.finish()
-}
-
-fun BaseFragment.navigateToActivity(activity: Class<*>) {
-    val getActivity = getActivity() as BaseActivity
-    val intent = Intent(getActivity, activity)
-    startActivity(intent)
-}
-
-fun BaseFragment.navigateToActivity(activity: Class<*>, bundle: Bundle) {
-    val getActivity = getActivity() as BaseActivity
-    val intent = Intent(getActivity, activity)
-    intent.putExtras(bundle)
-    startActivity(intent)
-}
-
-fun BaseFragment.navigateToActivityForResult(activity: Class<*>, requestCode: Int) {
-    val getActivity = getActivity() as BaseActivity
-    val intent = Intent(getActivity, activity)
-    startActivityForResult(intent, requestCode)
+fun BaseActivity.showNeutralDialog(title: String, message: String, buttonText: String) {
+    AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setNeutralButton(buttonText) { _, _ -> }
+            .create().show()
 }

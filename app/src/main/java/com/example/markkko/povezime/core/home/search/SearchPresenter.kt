@@ -1,9 +1,8 @@
 package com.example.markkko.povezime.core.home.search
 
 import com.example.markkko.povezime.core.base.rxTransaction
-import com.example.markkko.povezime.core.models.SearchRequest
+import com.example.markkko.povezime.core.models.SearchResultsReq
 import com.example.markkko.povezime.core.models.User
-import com.example.markkko.povezime.core.util.GeocoderUtils
 import com.example.markkko.povezime.core.util.SchedulerProvider
 
 import javax.inject.Inject
@@ -17,12 +16,12 @@ class SearchPresenter @Inject constructor(private val schedulerProvider: Schedul
 
     override lateinit var view: ISearchMVP.View
 
-    override fun getSearchResults(data: SearchRequest) {
+    override fun getSearchResults(data: SearchResultsReq) {
         rxTransaction {
             searchInteractor.getSearchResults(data)
                     .subscribeOn(schedulerProvider.backgroundThread())
                     .observeOn(schedulerProvider.mainThread())
-                    .subscribe({ view.showResults(it) }) { t -> view.showMessage("Server problem") }
+                    .subscribe({ view.showResults(it) }) { _ -> view.showMessage("Server problem") }
         }
     }
 

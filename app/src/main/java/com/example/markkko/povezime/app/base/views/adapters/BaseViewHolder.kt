@@ -1,4 +1,4 @@
-package com.gazindo.android.android.base.adapters
+package com.example.markkko.povezime.app.base.views.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -10,14 +10,14 @@ abstract class BaseViewHolder(itemView: View)
 
     val view: View = itemView
 
-
-    internal var entity: Any? = null
+    lateinit var entity: Any
 
     open fun setupListener(listener: RecyclerItemAdapter.ItemClickListener?) {
-            itemView.setOnClickListener(View.OnClickListener {
-                validateView ->
-                entity?.let { listener?.onItemClick(null, validateView, adapterPosition, it) }
+        listener?.let {
+            itemView.setOnClickListener({ validateView ->
+                it.onItemClick(null, validateView, adapterPosition, entity)
             })
+        }
     }
 
 

@@ -4,10 +4,11 @@ import com.example.markkko.povezime.app.auth.*
 import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.offer.OfferFragment
 import com.example.markkko.povezime.app.home.search.SearchFragment
+import com.example.markkko.povezime.app.results.search.SearchResultsFragment
 import dagger.Subcomponent
 
 
-@Subcomponent(modules = arrayOf(FeaturesModule::class))
+@Subcomponent(modules = [(FeaturesModule::class)])
 interface ActivityComponent {
 
     @Subcomponent.Builder
@@ -18,6 +19,8 @@ interface ActivityComponent {
 
     fun inject(fragment: SearchFragment)
     fun inject(fragment: OfferFragment)
+
+    fun inject(fragment: SearchResultsFragment)
 
     fun inject(fragment: AddCarActivity.AddCarFragment)
 

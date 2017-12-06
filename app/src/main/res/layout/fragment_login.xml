@@ -53,10 +53,10 @@
     <Button
         android:id="@+id/btn_login"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="38dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@drawable/login_shape"
+        android:background="@drawable/round_accent_l"
         android:text="@string/btn_login"
         android:textAllCaps="false"
         android:textColor="@color/text_white"

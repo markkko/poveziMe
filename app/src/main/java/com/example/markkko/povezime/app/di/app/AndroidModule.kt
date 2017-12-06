@@ -3,14 +3,17 @@ package com.example.markkko.povezime.app.di.app
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.location.Geocoder
 
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.util.AppConstants
+import com.example.markkko.povezime.core.util.GeocoderUtils
 
 import javax.inject.Singleton
 
 import dagger.Module
 import dagger.Provides
+import java.util.*
 
 
 @Singleton
@@ -29,5 +32,9 @@ class AndroidModule(private val application: PoveziMeApplication) {
     @Provides
     internal fun provideSharedPreferences(): SharedPreferences =
             application.getSharedPreferences(AppConstants.PREF_USER, Context.MODE_PRIVATE)
+
+    @Provides
+    internal fun provideGeocoder(context: Context): GeocoderUtils =
+            GeocoderUtils(Geocoder(context, Locale.getDefault()))
 
 }

@@ -107,8 +107,9 @@
     <string name="btn_facebook">Facebook login</string>
     <string name="btn_google">Google login</string>
 
-    <string name="yes">Da</string>
-    <string name="no">Ne</string>
+    <string name="general_yes">Da</string>
+    <string name="general_no">Ne</string>
+    <string name="general_ok">Ok</string>
     <string name="delete_dialog">Da li ste sigurni da želite da obrišete</string>
     <string name="noCar">Nemate nijedan automobil u bazi.</string>
     <string name="addCar">Dodaj automobil</string>
@@ -147,24 +148,22 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
     <string name="action_settings">Podešavanja</string>
+
     <string name="section_format">Hello World from section: %1$d</string>
+
     <string name="title_activity_signup">Registracija</string>
     <string name="title_activity_add_car">Dodaj automobil</string>
     <string name="title_activity_default">DefaultActivity</string>
     <string name="title_activity_profile">Profil</string>
     <string name="title_activity_login">Prijavi se</string>
-    <string name="title_activity_search_results">SearchResultsActivity</string>
-    <string name="title_activity_main2">Main2Activity</string>
-
+    <string name="title_fragment_search_results">Rezultati potraznje</string>
     <string name="title_activity_nav_tmp">NavTMPActivity</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
     <string name="title_activity_my_searches">MySearchesActivity</string>
     <string name="title_activity_result">ResultActivity</string>
     <string name="title_activity_all_offers">AllOffersActivity</string>
+
     <string name="alert_push_notifications">This device cannot receive push notifications</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
     <string name="title_activity_maps2">Map</string>
 </resources>

@@ -3,6 +3,7 @@
 
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>
+    <color name="text_white">#FFFFFF</color>
 
     <color name="colorPrimary">#c94b29</color>
     <color name="colorPrimaryDark">#942001</color>
@@ -26,7 +27,15 @@
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
 
-    <color name="text_gray">#8f8d84</color>
-    <color name="text_black">#32312c</color>
-    <color name="text_white">#fffaf0</color>
+    <color name="gray_10">#191919</color>
+    <color name="gray_9">#323232</color>
+    <color name="gray_8">#4b4b4b</color>
+    <color name="gray_7">#646464</color>
+    <color name="gray_6">#7d7d7d</color>
+    <color name="gray_5">#969696</color>
+    <color name="gray_4">#afafaf</color>
+    <color name="gray_3">#c8c8c8</color>
+    <color name="gray_2">#e1e1e1</color>
+    <color name="gray_1">#fafafa</color>
+
 </resources>

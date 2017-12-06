@@ -15,6 +15,9 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
 
     var newInstance = true
 
+    val baseActivity
+        get() = activity as BaseActivity
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(layoutId, container, false)
         retainInstance = true
@@ -32,11 +35,11 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
 
     open fun subscribeForUIEvents() {}
 
-    open fun prepareData(){}
+    open fun prepareData() {}
 
     abstract fun bind()
 
-    open fun load(){}
+    open fun load() {}
 
     override fun onResume() {
         super.onResume()

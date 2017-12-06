@@ -22,4 +22,8 @@
     <dimen name="fa_size_m">35sp</dimen>
     <dimen name="fa_size_j">60sp</dimen>
     <dimen name="fa_size_xl">80sp</dimen>
+
+    <dimen name="button_width_s">290dp</dimen>
+    <dimen name="button_width_l">390dp</dimen>
+    <dimen name="button_height">50dp</dimen>
 </resources>

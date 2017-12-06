@@ -11,9 +11,10 @@ import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.BaseHomeFragment
+import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.offer.IOfferMVP
-import com.example.markkko.povezime.core.models.OfferRequest
-import com.example.markkko.povezime.core.models.OfferResult
+import com.example.markkko.povezime.core.models.Offer
+import com.example.markkko.povezime.core.models.OfferResultsReq
 import com.example.markkko.povezime.core.models.Route
 import com.example.markkko.povezime.core.util.convertTimeToString
 import com.example.markkko.povezime.core.util.getTodayString
@@ -35,17 +36,11 @@ import javax.inject.Inject
 class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
 
-    override fun showMessage(message: String) {
+    override fun showMessage(message: String) {}
 
-    }
+    override fun showOfflineMessage(isCritical: Boolean) {}
 
-    override fun showOfflineMessage(isCritical: Boolean) {
-
-    }
-
-    override fun onOfferSuccess(results: List<OfferResult>) {
-
-    }
+    override fun onOfferSuccess(results: List<Offer>) {}
 
     override fun onRouteFetched(route: Route) {
         val lineOptions = route.lineOptions
@@ -72,11 +67,11 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     @Inject
     lateinit var presenter: IOfferMVP.Presenter
 
-    lateinit var mapView: GoogleMap
+    private lateinit var mapView: GoogleMap
 
     private val addresses = arrayOfNulls<LatLng>(5)
 
-    lateinit var mapFragment: SupportMapFragment
+    private lateinit var mapFragment: SupportMapFragment
 
     private var timeString: String? = null
 
@@ -134,7 +129,7 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
         if (user.cars.isEmpty()) {
             addCarLayout.visibility = View.VISIBLE
-            mainScrollView.visibility = View.GONE
+            mainView.visibility = View.GONE
         } else {
             val spinnerValues = java.util.ArrayList<String>()
             user.cars.forEach { spinnerValues.add(it.make + " " + it.model) }
@@ -143,7 +138,7 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
             spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
             carSpinner.adapter = spinnerAdapter
 
-            mainScrollView.visibility = View.VISIBLE
+            mainView.visibility = View.VISIBLE
             addCarLayout.visibility = View.GONE
         }
     }
@@ -160,7 +155,7 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
                 .throttleFirst(2, TimeUnit.SECONDS)
                  .filter {
                      var valid = true
-                     /*if (src == null) {
+                     if (src == null) {
                          fromAutocomplete.error = getString(R.string.empty_from)
                          valid = false
                      }
@@ -168,21 +163,28 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
                          toAutocomplete.error = getString(R.string.empty_to)
                          valid = false
                      }
-                     if (isNullOrEmpty(dateString)) {
+                    /* if (isNullOrEmpty(dateString)) {
                          dateLabel.error = getString(R.string.empty_date)
                          valid = false
                      }
+                     if (isNullOrEmpty(timeString)) {
+                         timeLabel.error = getString(R.string.empty_date)
+                         valid = false
+                     }*/
                      if (isNullOrEmpty(seats)) {
                          seats.error = getString(R.string.empty_seats)
                          valid = false
-                     }*/
+                     }
                      if (presenter.route == null) {
-                         showToast("Molimo uzaberite polaznu i krajnju tacku")
+                         baseActivity.showToast("Molimo uzaberite polaznu i krajnju tacku")
                          valid = false
                      }
                      valid
                  }
-                .subscribe { valid -> presenter.offerRide(createOffer()) }
+                .subscribe { valid ->
+                    val offer = createOffer()
+                    offer?.let { presenter.offerRide(it) }
+                }
     }
 
     override fun bind() {
@@ -361,14 +363,16 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackOpt3)
     }
 
-    private fun createOffer(): OfferRequest {
-        val offer = OfferRequest(getTodayString(), "13:25:00", presenter.route!!.toBackendString(),
-                3, 2, 2, presenter.me().id)
-        /*val offer = OfferRequest(dateString!!, timeString!!, presenter.route!!.toBackendString(),
-                1, getIntSafe(seats), getIntSafe(luggage), presenter.me().id)*/
-        return offer
+    private fun createOffer(): OfferResultsReq? {
+        presenter.route?.let {
+            val fromName = geocoder.getCityName(it.fullRoute.first())
+            val toName = geocoder.getCityName(it.fullRoute.last())
+            if (fromName != null && toName != null)
+                return  OfferResultsReq(presenter.me().id, getTodayString(), "13:25:00", presenter.route!!.toBackendString(),
+                        3, 2, 2, fromName, toName)
+        }
+        return null
     }
-
 
     /**********************
      * Companion

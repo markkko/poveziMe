@@ -2,8 +2,8 @@ package com.example.markkko.povezime.core.home.offer
 
 import com.example.markkko.povezime.core.base.*
 import com.example.markkko.povezime.core.models.Car
-import com.example.markkko.povezime.core.models.OfferRequest
-import com.example.markkko.povezime.core.models.OfferResult
+import com.example.markkko.povezime.core.models.Offer
+import com.example.markkko.povezime.core.models.OfferResultsReq
 import com.example.markkko.povezime.core.models.Route
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Single
@@ -13,7 +13,7 @@ interface IOfferMVP {
 
     interface View: BaseView {
 
-        fun onOfferSuccess(results: List<OfferResult>)
+        fun onOfferSuccess(results: List<Offer>)
 
         fun onRouteFetched(route: Route)
 
@@ -27,7 +27,7 @@ interface IOfferMVP {
 
         fun getRoute(addresses: Array<LatLng?>)
 
-        fun offerRide(offer: OfferRequest)
+        fun offerRide(offer: OfferResultsReq)
 
         fun getCars(): List<Car>
 
@@ -35,7 +35,7 @@ interface IOfferMVP {
 
     interface Interactor: BaseUserInteractor {
 
-        fun offerRide(offer: OfferRequest) : Single<List<OfferResult>>
+        fun offerRide(offer: OfferResultsReq) : Single<List<Offer>>
 
         fun getRoute(addresses: Array<LatLng?>): Single<String>
     }
