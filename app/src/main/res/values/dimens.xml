@@ -26,4 +26,6 @@
     <dimen name="button_width_s">180dp</dimen>
     <dimen name="button_width_l">300dp</dimen>
     <dimen name="button_height">30dp</dimen>
+
+    <dimen name="button_width_date">130dp</dimen>
 </resources>

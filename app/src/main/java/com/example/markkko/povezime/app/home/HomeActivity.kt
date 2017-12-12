@@ -10,8 +10,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.base.views.BaseActivity
+import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.home.offer.OfferFragment
 import com.example.markkko.povezime.app.home.search.SearchFragment
+import com.example.markkko.povezime.app.profile.ProfileActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity() {
@@ -43,7 +45,8 @@ class HomeActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.home) {
+        if (id == R.id.action_profile) {
+            navigateToActivity(ProfileActivity::class.java)
             return true
         }
 

@@ -172,7 +172,7 @@
                 <Button
                     android:id="@+id/dateButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/button_height"
                     android:layout_marginEnd="50dp"
                     android:layout_weight="1"
                     android:background="@drawable/round_accent_s"
@@ -183,7 +183,7 @@
                 <Button
                     android:id="@+id/timeButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/button_height"
                     android:layout_weight="1"
                     android:background="@drawable/round_accent_s"
                     android:text="@string/time"

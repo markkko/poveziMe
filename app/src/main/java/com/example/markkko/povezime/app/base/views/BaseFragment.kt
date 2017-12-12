@@ -18,8 +18,11 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
     val baseActivity
         get() = activity as BaseActivity
 
+    open val hasOptionMenu: Boolean = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(layoutId, container, false)
+        setHasOptionsMenu(hasOptionMenu)
         retainInstance = true
 
         savedInstanceState?.let { newInstance = false }
@@ -44,7 +47,7 @@ abstract class BaseFragment : android.support.v4.app.Fragment() {
     override fun onResume() {
         super.onResume()
         bind()
-        load()
+        if (newInstance) load()
     }
 
 

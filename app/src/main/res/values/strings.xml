@@ -100,6 +100,10 @@
     <string name="empty_date">Molimo unesite datum</string>
     <string name="empty_time">Molimo unesite vreme</string>
     <string name="empty_seats">Molimo unesite broj osoba</string>
+    <string name="empty_name">Molimo unesite svoje ime</string>
+    <string name="empty_surname">Molimo unesite voje prezime</string>
+    <string name="empty_phone">Molimo unesite broj validan telefona</string>
+    <string name="empty_email">Molimo unesite broj validan mail</string>
 
     <string name="facebook_app_id">1859625067593092</string>
     <string name="fb_login_protocol_scheme">fb1859625067593092</string>
@@ -174,4 +178,5 @@
     <string name="menu_log_out">Odjavi se</string>
 
     <string name="from_to">od %1$s do %2$s</string>
+    <string name="profile_user_updated">Korisnik je uspesno izmenjen</string>
 </resources>
