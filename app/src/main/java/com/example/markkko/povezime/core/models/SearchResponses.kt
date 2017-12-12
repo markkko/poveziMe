@@ -7,4 +7,6 @@ class SearchResultRes(val search: Search,
 
 class SearchRequestRes(val id: Long,
                        val type: RequestType,
-                       val answer: AnswerType)
+                       val answer: AnswerType,
+                       val offer: Offer,
+                       val search: Search)

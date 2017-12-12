@@ -24,7 +24,7 @@ interface ISearchResultsMVP {
 
         fun getResults(): List<Offer>
 
-        fun postRequest(data: SearchRequestReq)
+        fun postRequest(offerId: Long)
     }
 
     interface Interactor : BaseUserInteractor {
@@ -32,6 +32,8 @@ interface ISearchResultsMVP {
         fun getResults(): List<Offer>
 
         fun postRequest(data: SearchRequestReq) : Single<SearchRequestRes>
+
+        fun getCurrentSearch(): Search
     }
 
 }

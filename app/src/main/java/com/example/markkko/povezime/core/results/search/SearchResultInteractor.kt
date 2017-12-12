@@ -18,6 +18,9 @@ class SearchResultInteractor @Inject constructor(private val searchRepository: S
     override fun postRequest(data: SearchRequestReq): Single<SearchRequestRes> =
             searchApi.postRequest(data)
 
+    override fun getCurrentSearch(): Search =
+            searchRepository.currentSearch!!
+
     override fun me(): User = userRepository.user
 
 }

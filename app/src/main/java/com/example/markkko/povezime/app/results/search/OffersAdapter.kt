@@ -12,8 +12,8 @@ import com.example.markkko.povezime.core.models.Offer
 import javax.inject.Inject
 
 
-class SearchResultsAdapter @Inject constructor(context: Context)
-    : RecyclerItemAdapter<Offer, SearchResultsAdapter.ViewHolder>(layoutId = R.layout.item_search_result, context = context) {
+class OffersAdapter @Inject constructor(context: Context)
+    : RecyclerItemAdapter<Offer, OffersAdapter.ViewHolder>(layoutId = R.layout.item_search_result, context = context) {
 
     override fun createHolder(view: View): ViewHolder = ViewHolder(view)
 

@@ -95,7 +95,7 @@
     <string name="action_profile">Profil</string>
 
     <!-- Empty fields -->
-    <string name="empty_from">Molimo izaberite destinaciju </string>
+    <string name="empty_from">Molimo izaberite polaznu tacku </string>
     <string name="empty_to">Molimo izaberite odrediste</string>
     <string name="empty_date">Molimo unesite datum</string>
     <string name="empty_time">Molimo unesite vreme</string>

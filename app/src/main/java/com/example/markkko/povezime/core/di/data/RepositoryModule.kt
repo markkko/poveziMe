@@ -24,7 +24,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideLoginApiService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
+    fun provideLoginApiService(retrofit: Retrofit): UserApi =
+            retrofit.create(UserApi::class.java)
 
     @Provides
     @Singleton

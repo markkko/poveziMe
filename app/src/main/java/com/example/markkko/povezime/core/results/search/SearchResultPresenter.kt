@@ -19,8 +19,9 @@ class SearchResultPresenter @Inject constructor(private val interactor: ISearchR
 
     override fun getResults(): List<Offer> = interactor.getResults()
 
-    override fun postRequest(data: SearchRequestReq) {
-        interactor.postRequest(data)
+    override fun postRequest(offerId: Long) {
+        val request = SearchRequestReq(userId = me().id, searchId = interactor.getCurrentSearch().id, offerId = offerId)
+        interactor.postRequest(request)
                 .subscribeOn(schedulerProvider.backgroundThread())
                 .observeOn(schedulerProvider.mainThread())
                 .subscribe({view.onRequestPosted(it)},{})

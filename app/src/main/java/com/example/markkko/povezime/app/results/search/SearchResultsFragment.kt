@@ -7,8 +7,8 @@ import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseFragment
 import com.example.markkko.povezime.app.base.views.adapters.RecyclerItemAdapter
+import com.example.markkko.povezime.core.models.Offer
 import com.example.markkko.povezime.core.models.SearchRequestRes
-import com.example.markkko.povezime.core.models.Search
 import com.example.markkko.povezime.core.results.search.ISearchResultsMVP
 import kotlinx.android.synthetic.main.fragment_result.*
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class SearchResultsFragment: BaseFragment(), ISearchResultsMVP.View {
     override val layoutId: Int = R.layout.fragment_result
 
     @Inject
-    lateinit var adapter: SearchResultsAdapter
+    lateinit var adapter: OffersAdapter
 
     @Inject
     lateinit var presenter: ISearchResultsMVP.Presenter
@@ -38,10 +38,9 @@ class SearchResultsFragment: BaseFragment(), ISearchResultsMVP.View {
 
     private val onResultClickListener = object : RecyclerItemAdapter.ItemClickListener {
         override fun onItemClick(parent: View?, v: View, position: Int, entity: Any) {
-            val result = entity as Search
+            val result = entity as Offer
             when (v.id) {
-
-                //R.id.request -> if (!result.isSent) presenter.postRequest()
+                R.id.request -> if (!result.isSent) presenter.postRequest(result.id)
             }
         }
     }
