@@ -166,4 +166,12 @@
     <string name="alert_push_notifications">This device cannot receive push notifications</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_maps2">Map</string>
+    <string name="requests_send_request">Posalji zahtev</string>
+    <string name="requests_request_sent">Zahtev poslan</string>
+    <string name="menu_all_requests">Moji zahtevi</string>
+    <string name="menu_my_profile">Moj profil</string>
+    <string name="menu_add_car">Dodaj automobil</string>
+    <string name="menu_log_out">Odjavi se</string>
+
+    <string name="from_to">od %1$s do %2$s</string>
 </resources>

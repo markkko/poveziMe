@@ -3,9 +3,8 @@ package com.example.markkko.povezime.core.models
 import com.google.gson.annotations.SerializedName
 
 
-data class Offer(override val id: Long,
-                 @SerializedName("user_id") val userId: Long,
-                 val user: String,
+class Offer(override val id: Long,
+                 val user: User,
                  val from: String,
                  val to: String,
                  val seats: Int,

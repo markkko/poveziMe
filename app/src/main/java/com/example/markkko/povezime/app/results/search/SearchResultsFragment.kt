@@ -21,7 +21,7 @@ class SearchResultsFragment: BaseFragment(), ISearchResultsMVP.View {
     override fun showOfflineMessage(isCritical: Boolean) {}
 
     override fun onRequestPosted(request: SearchRequestRes) {
-
+        adapter.notifyDataSetChanged()
     }
 
     /*********** Fields **************/

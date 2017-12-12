@@ -13,4 +13,9 @@ class SearchRepository @Inject constructor() {
 
     var results: ArrayList<Offer> = ArrayList()
 
+    fun markSent(offer: Offer) {
+        val resultToMark = results.first { it.id == offer.id }
+        resultToMark.isSent = true
+    }
+
 }

@@ -12,7 +12,7 @@ class GeocoderUtils @Inject constructor(private var geocoder: Geocoder) {
     fun getCityName(latLng: LatLng): String? {
         try {
             val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            return addresses[0].getAddressLine(0)
+            return addresses[0].getAddressLine(1)
         } catch (e: IOException) {
             e.printStackTrace()
         }

@@ -17,9 +17,6 @@ data class User(override val id: Long,
 
     @SerializedName("reg_id")
     var regId: String? = null
-        set(regId) {
-            field = this.regId
-        }
 
     fun makeDeepCopy(): User {
         val cars = ArrayList<Car>()

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/signup_background"
     tools:context="com.example.markkko.povezime.app.auth.CompleteInfoActivity">
 
     <android.support.design.widget.TextInputLayout

@@ -155,6 +155,7 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
                 .throttleFirst(2, TimeUnit.SECONDS)
                  .filter {
                      var valid = true
+
                      if (src == null) {
                          fromAutocomplete.error = getString(R.string.empty_from)
                          valid = false
@@ -214,6 +215,7 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
     override fun onFromUpdateInternal(place: Place) {
         addresses[0] = place.latLng
+        src = place.latLng
 
         mapView.clear()
         val options = MarkerOptions()
@@ -232,6 +234,8 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
     override fun onToUpdateInternal(place: Place) {
         addresses[1] = place.latLng
+        dst = place.latLng
+
         mapView.clear()
         val options = MarkerOptions()
         options.position(addresses[1]!!)

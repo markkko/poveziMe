@@ -1,5 +1,6 @@
 package com.example.markkko.povezime.core.home.search
 
+import android.util.Log
 import com.example.markkko.povezime.core.base.rxTransaction
 import com.example.markkko.povezime.core.models.SearchResultsReq
 import com.example.markkko.povezime.core.models.User
@@ -21,7 +22,9 @@ class SearchPresenter @Inject constructor(private val schedulerProvider: Schedul
             searchInteractor.getSearchResults(data)
                     .subscribeOn(schedulerProvider.backgroundThread())
                     .observeOn(schedulerProvider.mainThread())
-                    .subscribe({ view.showResults(it) }) { _ -> view.showMessage("Server problem") }
+                    .subscribe({ view.showResults(it) }) { t ->
+                        Log.d("search_thr", t.message)
+                        view.showMessage("Server problem") }
         }
     }
 
