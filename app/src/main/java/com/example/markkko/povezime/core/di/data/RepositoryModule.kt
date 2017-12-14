@@ -23,17 +23,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RepositoryModule {
 
     @Provides
-    @Singleton
     fun provideLoginApiService(retrofit: Retrofit): UserApi =
             retrofit.create(UserApi::class.java)
 
     @Provides
-    @Singleton
     fun provideSearchApiService(retrofit: Retrofit): SearchApi =
             retrofit.create(SearchApi::class.java)
 
     @Provides
-    @Singleton
     fun provideOfferApiService(retrofit: Retrofit): OfferApi =
             retrofit.create(OfferApi::class.java)
 
@@ -41,7 +38,6 @@ class RepositoryModule {
     fun provideCarApiService(retrofit: Retrofit): CarApi = retrofit.create(CarApi::class.java)
 
     @Provides
-    @Singleton
     fun provideRetrofit(baseUrl: HttpUrl?, converterFactory: Converter.Factory, callAdapterFactory: CallAdapter.Factory, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(baseUrl)

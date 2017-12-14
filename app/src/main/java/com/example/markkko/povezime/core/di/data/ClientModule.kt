@@ -1,5 +1,7 @@
 package com.example.markkko.povezime.core.di.data
 
+import android.content.SharedPreferences
+import com.example.markkko.povezime.app.util.isNullOrEmpty
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -21,11 +23,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 @Module
 class ClientModule {
 
-    @Singleton
     @Provides
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
                             @Named("networkTimeoutInSeconds") networkTimeoutInSeconds: Int,
-                            @Named("isDebug") isDebug: Boolean): OkHttpClient {
+                            @Named("isDebug") isDebug: Boolean,
+                            @Named("authInterceptor") authInterceptor: Interceptor?): OkHttpClient {
 
         val okHttpClient = OkHttpClient.Builder()
                 //.addNetworkInterceptor(cacheInterceptor)
@@ -33,6 +35,8 @@ class ClientModule {
                 //.cache(cache)
                 .connectTimeout(networkTimeoutInSeconds.toLong(), TimeUnit.SECONDS)
                 .readTimeout(networkTimeoutInSeconds.toLong(), TimeUnit.SECONDS)
+
+        authInterceptor?.let { okHttpClient.addInterceptor(it) }
 
         //show logs if app is in Debug mode
         //if (isDebug)
@@ -51,7 +55,9 @@ class ClientModule {
 
     @Provides
     @Named("authInterceptor")
-    fun provideAuthorizationInterceptor(@Named("token") token: String): Interceptor {
+    fun provideAuthorizationInterceptor(prefs: SharedPreferences): Interceptor? {
+        val token = prefs.getString("token", "")
+        if (isNullOrEmpty(token)) return null
         return Interceptor { chain ->
             val request = chain.request().newBuilder().addHeader("Authorization", token).build()
             //headerReasonCode = response.header("X-Reason-Code", "");

@@ -1,7 +1,6 @@
 package com.example.markkko.povezime.core.auth.login
 
 import android.app.Activity
-import com.example.markkko.povezime.core.auth.LoginResponse
 import com.example.markkko.povezime.core.base.BaseInteractor
 import com.example.markkko.povezime.core.base.BasePresenter
 import com.example.markkko.povezime.core.base.BaseView
