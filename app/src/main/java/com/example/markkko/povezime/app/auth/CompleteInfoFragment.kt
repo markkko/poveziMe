@@ -46,8 +46,8 @@ class CompleteInfoFragment: BaseFragment(), ICompleteInfoMVP.View  {
      * Setup
      *********************/
 
-    override fun injectDependencies(application: PoveziMeApplication) {
-        application.activityComponent().inject(this)
+    override fun injectDependencies() {
+        baseActivity.injector.inject(this)
     }
 
     override fun subscribeForUIEvents() {

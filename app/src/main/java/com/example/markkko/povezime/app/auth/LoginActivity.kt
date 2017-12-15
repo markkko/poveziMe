@@ -93,8 +93,8 @@ class LoginActivity : BaseActivity(), ILoginMVP.View {
         RxView.clicks(btn_signup).subscribe({navigateToActivity(RegistrationActivity::class.java, Bundle())})
     }
 
-    override fun injectDependencies(application: PoveziMeApplication) {
-        application.activityComponent().inject(this)
+    override fun injectDependencies() {
+        injector.inject(this)
     }
 
 

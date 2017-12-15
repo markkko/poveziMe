@@ -64,8 +64,8 @@ class RegistrationFragment : BaseFragment(), IRegistrationMVP.View {
                 .subscribe({ presenter.registerOnFirebase(email.text.toString(), password.text.toString()) })
     }
 
-    override fun injectDependencies(application: PoveziMeApplication) {
-        application.activityComponent().inject(this)
+    override fun injectDependencies() {
+        baseActivity.injector.inject(this)
     }
 
     override fun bind() {

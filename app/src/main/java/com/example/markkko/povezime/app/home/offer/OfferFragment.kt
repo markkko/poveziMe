@@ -192,8 +192,8 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         presenter.view = this
     }
 
-    override fun injectDependencies(application: PoveziMeApplication) {
-        application.activityComponent().inject(this)
+    override fun injectDependencies() {
+        baseActivity.injector.inject(this)
     }
 
     /**********************

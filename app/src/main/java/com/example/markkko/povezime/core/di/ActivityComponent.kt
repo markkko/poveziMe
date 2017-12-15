@@ -9,12 +9,12 @@ import com.example.markkko.povezime.app.results.search.SearchResultsFragment
 import dagger.Subcomponent
 
 
-@Subcomponent(modules = [(FeaturesModule::class)])
+@Subcomponent(modules = [(ActivityModule::class)])
 interface ActivityComponent {
 
     @Subcomponent.Builder
     interface Builder {
-        fun featuresModule(featuresModule: FeaturesModule): Builder
+        fun activityModule(activityModule: ActivityModule): Builder
         fun build(): ActivityComponent
     }
 

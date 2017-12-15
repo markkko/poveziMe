@@ -17,8 +17,8 @@ class ActivityModule(val activity: BaseActivity) {
 
     @Provides
     @Named(AppConstants.ACTIVITY_CONTEXT)
-    internal fun provideActivityContext(): Context {
-        return activity
-    }
+    internal fun provideActivityContext(): Context =
+        activity
+
 
 }

@@ -45,7 +45,6 @@ class ClientModule {
         return okHttpClient.build()
     }
 
-    @Singleton
     @Provides
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         val logging = HttpLoggingInterceptor()
@@ -66,7 +65,6 @@ class ClientModule {
     }
 
     @Provides
-    @Singleton
     fun provideCache(@Named("cacheDir") cacheDir: File, @Named("cacheSize") cacheSize: Long): Cache? {
         var cache: Cache? = null
 

@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 @Module
-class RepositoryModule {
+class ApiModule {
 
     @Provides
     fun provideLoginApiService(retrofit: Retrofit): UserApi =
@@ -48,19 +48,16 @@ class RepositoryModule {
     }
 
     @Provides
-    @Singleton
     fun provideGsonConverterFactory(gson: Gson): Converter.Factory {
         return GsonConverterFactory.create(gson)
     }
 
-    @Singleton
     @Provides
     fun provideGson(): Gson {
         return Gson()
     }
 
     @Provides
-    @Singleton
     fun provideRxJavaCallAdapterFactory(): CallAdapter.Factory {
         return RxJava2CallAdapterFactory.create()
     }

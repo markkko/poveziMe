@@ -83,9 +83,8 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
         //.subscribe { valid -> presenter.getSearchResults(SearchResultsReq.getDefaultRequest(presenter.me().id, getTodayString())) }
     }
 
-
-    override fun injectDependencies(application: PoveziMeApplication) {
-        application.activityComponent().inject(this)
+    override fun injectDependencies() {
+        baseActivity.injector.inject(this)
     }
 
     override fun bind() {

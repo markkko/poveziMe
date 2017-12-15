@@ -65,8 +65,8 @@ class ProfileActivity : BaseFragmentedActivity() {
             presenter.view = this
         }
 
-        override fun injectDependencies(application: PoveziMeApplication) {
-            application.activityComponent().inject(this)
+        override fun injectDependencies() {
+            baseActivity.injector.inject(this)
         }
 
         override fun load() {

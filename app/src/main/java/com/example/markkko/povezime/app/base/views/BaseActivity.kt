@@ -17,6 +17,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     var newInstance = true
 
+    val injector by lazy { (application as PoveziMeApplication).activityComponent(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         create(savedInstanceState)
@@ -27,7 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
         setupActionBar()
         layoutInflater.inflate(layoutId,  findViewById(R.id.frame_holder))
         ButterKnife.bind(this)
-        injectDependencies(PoveziMeApplication[this])
+        injectDependencies()
 
         savedInstanceState?.let { newInstance = false }
 
@@ -71,11 +73,6 @@ abstract class BaseActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun finish() {
-        super.finish()
-        releaseSubComponents(PoveziMeApplication[this])
-    }
-
     override fun onResume() {
         super.onResume()
         bind()
@@ -86,8 +83,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    open protected fun injectDependencies(application: PoveziMeApplication){}
-
-    open protected fun releaseSubComponents(application: PoveziMeApplication){}
+    open protected fun injectDependencies(){}
 
 }

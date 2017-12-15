@@ -10,11 +10,13 @@ import butterknife.BindView
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.base.views.adapters.BaseViewHolder
 import com.example.markkko.povezime.app.base.views.adapters.RecyclerItemAdapter
+import com.example.markkko.povezime.app.util.AppConstants
 import com.example.markkko.povezime.core.models.Offer
 import javax.inject.Inject
+import javax.inject.Named
 
 
-class OffersAdapter @Inject constructor(context: Context)
+class OffersAdapter @Inject constructor(@Named(AppConstants.ACTIVITY_CONTEXT) context: Context)
     : RecyclerItemAdapter<Offer, OffersAdapter.ViewHolder>(layoutId = R.layout.item_search_result, context = context) {
 
     override fun createHolder(view: View): ViewHolder = ViewHolder(view)

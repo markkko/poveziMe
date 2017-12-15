@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.SharedPreferences
 
 import com.example.markkko.povezime.BuildConfig
+import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.util.AppConstants
 import com.example.markkko.povezime.app.util.AppSchedulerProvider
+import com.example.markkko.povezime.core.di.ActivityComponent
 import com.example.markkko.povezime.core.models.User
 import com.example.markkko.povezime.core.util.Constants
 import com.example.markkko.povezime.core.util.SchedulerProvider
@@ -23,8 +25,8 @@ import dagger.Provides
 import okhttp3.HttpUrl
 
 @Singleton
-@Module
-class ApplicationModule {
+@Module(subcomponents = [(ActivityComponent::class)])
+class ApplicationModule (val application: PoveziMeApplication) {
     @Provides
     @Singleton
     @Named("isDebug")
