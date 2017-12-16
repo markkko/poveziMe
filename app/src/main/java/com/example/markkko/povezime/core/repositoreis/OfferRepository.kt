@@ -1,4 +1,4 @@
-package com.example.markkko.povezime.core.results.offer
+package com.example.markkko.povezime.core.repositoreis
 
 import com.example.markkko.povezime.core.models.Offer
 import javax.inject.Inject

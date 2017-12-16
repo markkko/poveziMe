@@ -28,7 +28,4 @@ class RegistrationPresenter @Inject constructor(private val prefs:SharedPreferen
                     }
                 }
     }
-
-    override fun clear() {
-    }
 }

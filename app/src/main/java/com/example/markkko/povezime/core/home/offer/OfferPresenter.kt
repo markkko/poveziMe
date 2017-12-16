@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.util.Log
 import com.example.markkko.povezime.core.base.rxTransaction
 import com.example.markkko.povezime.core.models.Car
-import com.example.markkko.povezime.core.models.OfferResultsReq
+import com.example.markkko.povezime.core.models.Offer
 import com.example.markkko.povezime.core.models.Route
 import com.example.markkko.povezime.core.models.User
 import com.example.markkko.povezime.core.util.RouteParser
@@ -41,7 +41,7 @@ class OfferPresenter @Inject constructor(private val offerInteractor: IOfferMVP.
                         { view.showMessage("Route cannot be fetched") })
     }
 
-    override fun offerRide(offer: OfferResultsReq) {
+    override fun offerRide(offer: Offer) {
         rxTransaction {
             offerInteractor.offerRide(offer)
                     .subscribeOn(schedulerProvider.backgroundThread())
@@ -101,7 +101,4 @@ class OfferPresenter @Inject constructor(private val offerInteractor: IOfferMVP.
 
     override fun getCars(): List<Car> = me().cars
 
-    override fun clear() {
-
-    }
 }

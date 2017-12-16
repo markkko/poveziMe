@@ -1,12 +1,12 @@
 package com.example.markkko.povezime.core.home.offer
 
 import android.util.Log
-import com.example.markkko.povezime.app.user.UserRepository
 import com.example.markkko.povezime.core.data.apis.OfferApi
 import com.example.markkko.povezime.core.models.Offer
-import com.example.markkko.povezime.core.models.OfferResultsReq
+import com.example.markkko.povezime.core.models.Search
 import com.example.markkko.povezime.core.models.User
-import com.example.markkko.povezime.core.results.offer.OfferRepository
+import com.example.markkko.povezime.core.repositoreis.OfferRepository
+import com.example.markkko.povezime.core.repositoreis.UserRepository
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Single
 import java.io.BufferedReader
@@ -23,9 +23,10 @@ class OfferInteractor @Inject constructor(private val offerApi: OfferApi,
                                           private val offerRepository: OfferRepository)
     : IOfferMVP.Interactor {
 
-    override fun offerRide(offer: OfferResultsReq): Single<List<Offer>> =
+    override fun offerRide(offer: Offer): Single<List<Search>> =
             offerApi.offerRide(offer)
-                    .doOnSuccess { offerRepository.results = it as ArrayList<Offer> }
+                    .doOnSuccess { offerRepository.results = it.offer as ArrayList<Offer> }
+                    .map { it.searches }
 
     override fun me(): User = userRepository.user
 

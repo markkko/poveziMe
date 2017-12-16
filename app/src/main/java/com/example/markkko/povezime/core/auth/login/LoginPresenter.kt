@@ -51,7 +51,4 @@ class LoginPresenter @Inject constructor(private val schedulerProvider: Schedule
                     { throwable -> Log.d("thr_send_info", throwable.toString()) }
         }
     }
-
-    override fun clear() {
-    }
 }

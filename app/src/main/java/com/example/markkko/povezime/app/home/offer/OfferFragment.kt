@@ -7,15 +7,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import butterknife.OnClick
 import com.example.markkko.povezime.R
-import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.BaseHomeFragment
 import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.offer.IOfferMVP
 import com.example.markkko.povezime.core.models.Offer
-import com.example.markkko.povezime.core.models.OfferResultsReq
 import com.example.markkko.povezime.core.models.Route
+import com.example.markkko.povezime.core.models.Search
 import com.example.markkko.povezime.core.util.convertTimeToString
 import com.example.markkko.povezime.core.util.getTodayString
 import com.google.android.gms.location.places.Place
@@ -40,7 +39,7 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
     override fun showOfflineMessage(isCritical: Boolean) {}
 
-    override fun onOfferSuccess(results: List<Offer>) {}
+    override fun onOfferSuccess(results: List<Search>) {}
 
     override fun onRouteFetched(route: Route) {
         val lineOptions = route.lineOptions
@@ -153,17 +152,17 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
         RxView.clicks(offerButton)
                 .throttleFirst(2, TimeUnit.SECONDS)
-                 .filter {
-                     var valid = true
+                .filter {
+                    var valid = true
 
-                     if (src == null) {
-                         fromAutocomplete.error = getString(R.string.empty_from)
-                         valid = false
-                     }
-                     if (dst == null) {
-                         toAutocomplete.error = getString(R.string.empty_to)
-                         valid = false
-                     }
+                    if (src == null) {
+                        fromAutocomplete.error = getString(R.string.empty_from)
+                        valid = false
+                    }
+                    if (dst == null) {
+                        toAutocomplete.error = getString(R.string.empty_to)
+                        valid = false
+                    }
                     /* if (isNullOrEmpty(dateString)) {
                          dateLabel.error = getString(R.string.empty_date)
                          valid = false
@@ -172,16 +171,16 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
                          timeLabel.error = getString(R.string.empty_date)
                          valid = false
                      }*/
-                     if (isNullOrEmpty(seats)) {
-                         seats.error = getString(R.string.empty_seats)
-                         valid = false
-                     }
-                     if (presenter.route == null) {
-                         baseActivity.showToast("Molimo uzaberite polaznu i krajnju tacku")
-                         valid = false
-                     }
-                     valid
-                 }
+                    if (isNullOrEmpty(seats)) {
+                        seats.error = getString(R.string.empty_seats)
+                        valid = false
+                    }
+                    if (presenter.route == null) {
+                        baseActivity.showToast("Molimo uzaberite polaznu i krajnju tacku")
+                        valid = false
+                    }
+                    valid
+                }
                 .subscribe { valid ->
                     val offer = createOffer()
                     offer?.let { presenter.offerRide(it) }
@@ -367,13 +366,13 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallbackOpt3)
     }
 
-    private fun createOffer(): OfferResultsReq? {
+    private fun createOffer(): Offer? {
         presenter.route?.let {
             val fromName = geocoder.getCityName(it.fullRoute.first())
             val toName = geocoder.getCityName(it.fullRoute.last())
             if (fromName != null && toName != null)
-                return  OfferResultsReq(presenter.me().id, getTodayString(), "13:25:00", presenter.route!!.toBackendString(),
-                        3, 2, 2, fromName, toName)
+                return Offer(userId = presenter.me().id, date = getTodayString(), time = "13:25:00", route = presenter.route!!.toBackendString(),
+                        seats = 3, luggage = 2, fromName = fromName, toName = toName)
         }
         return null
     }

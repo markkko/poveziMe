@@ -1,7 +1,7 @@
 package com.example.markkko.povezime.core.models
 
 
-enum class RequestType {
+enum class RideType {
 
     O,
     S

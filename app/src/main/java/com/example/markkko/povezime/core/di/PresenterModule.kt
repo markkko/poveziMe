@@ -14,6 +14,8 @@ import com.example.markkko.povezime.core.home.search.ISearchMVP
 import com.example.markkko.povezime.core.home.search.SearchPresenter
 import com.example.markkko.povezime.core.profile.IProfileMVP
 import com.example.markkko.povezime.core.profile.ProfilePresenter
+import com.example.markkko.povezime.core.requests.AllRequestsPresenter
+import com.example.markkko.povezime.core.requests.IRequestsMVP
 import com.example.markkko.povezime.core.results.search.ISearchResultsMVP
 import com.example.markkko.povezime.core.results.search.SearchResultPresenter
 import dagger.Module
@@ -45,6 +47,10 @@ class PresenterModule {
 
     @Provides
     fun provideSearchResultPresenter(presenter: SearchResultPresenter): ISearchResultsMVP.Presenter =
+            presenter
+
+    @Provides
+    fun provideRequestsPresenter(presenter: AllRequestsPresenter): IRequestsMVP.Presenter =
             presenter
 
     @Provides

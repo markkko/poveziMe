@@ -13,6 +13,8 @@ import com.example.markkko.povezime.core.home.search.ISearchMVP
 import com.example.markkko.povezime.core.home.search.SearchInteractor
 import com.example.markkko.povezime.core.profile.IProfileMVP
 import com.example.markkko.povezime.core.profile.ProfileInteractor
+import com.example.markkko.povezime.core.requests.AllRequestsInteractor
+import com.example.markkko.povezime.core.requests.IRequestsMVP
 import com.example.markkko.povezime.core.results.search.ISearchResultsMVP
 import com.example.markkko.povezime.core.results.search.SearchResultInteractor
 import dagger.Module
@@ -40,6 +42,10 @@ class InteractorModule {
 
     @Provides
     fun provideSearchResultInteractor(interactor: SearchResultInteractor): ISearchResultsMVP.Interactor =
+            interactor
+
+    @Provides
+    fun provideRequestsInteractor(interactor: AllRequestsInteractor): IRequestsMVP.Interactor =
             interactor
 
     @Provides

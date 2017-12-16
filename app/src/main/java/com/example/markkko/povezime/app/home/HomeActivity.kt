@@ -11,9 +11,11 @@ import android.view.MenuItem
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.base.views.BaseActivity
 import com.example.markkko.povezime.app.base.views.navigateToActivity
+import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.offer.OfferFragment
 import com.example.markkko.povezime.app.home.search.SearchFragment
 import com.example.markkko.povezime.app.profile.ProfileActivity
+import com.example.markkko.povezime.app.requests.RequestsActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : BaseActivity() {
@@ -49,8 +51,15 @@ class HomeActivity : BaseActivity() {
             navigateToActivity(ProfileActivity::class.java)
             return true
         }
+        if (id == R.id.action_requests) {
+            navigateToActivity(RequestsActivity::class.java)
+        }
+        if (id == R.id.action_add_car) {
+            navigateToActivity(AddCarActivity::class.java)
+            return true
+        }
 
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -61,8 +70,7 @@ class HomeActivity : BaseActivity() {
             else OfferFragment.newInstance()
         }
 
-        override fun getCount(): Int =
-                2
+        override fun getCount(): Int = 2
     }
 
 }

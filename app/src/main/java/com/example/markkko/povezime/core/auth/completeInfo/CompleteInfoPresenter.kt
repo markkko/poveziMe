@@ -27,7 +27,4 @@ class CompleteInfoPresenter @Inject constructor(private val interactor: Complete
 
     override fun me(): User = interactor.me()
 
-    override fun clear() {
-
-    }
 }

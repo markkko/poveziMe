@@ -11,6 +11,4 @@ interface BasePresenter{
         rxDispose()
     }
 
-    fun clear()
-
 }

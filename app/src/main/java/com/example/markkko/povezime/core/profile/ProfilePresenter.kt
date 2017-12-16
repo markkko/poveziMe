@@ -21,8 +21,4 @@ class ProfilePresenter @Inject constructor(private val interactor: ProfileIntera
     }
 
     override fun me(): User = interactor.me()
-
-    override fun clear() {
-
-    }
 }

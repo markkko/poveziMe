@@ -1,9 +1,6 @@
 package com.example.markkko.povezime.core.di.data
 
-import com.example.markkko.povezime.core.data.apis.CarApi
-import com.example.markkko.povezime.core.data.apis.UserApi
-import com.example.markkko.povezime.core.data.apis.OfferApi
-import com.example.markkko.povezime.core.data.apis.SearchApi
+import com.example.markkko.povezime.core.data.apis.*
 import com.google.gson.Gson
 
 import javax.inject.Singleton
@@ -33,6 +30,10 @@ class ApiModule {
     @Provides
     fun provideOfferApiService(retrofit: Retrofit): OfferApi =
             retrofit.create(OfferApi::class.java)
+
+    @Provides
+    fun provideRideApiService(retrofit: Retrofit): RideApi =
+            retrofit.create(RideApi::class.java)
 
     @Provides
     fun provideCarApiService(retrofit: Retrofit): CarApi = retrofit.create(CarApi::class.java)

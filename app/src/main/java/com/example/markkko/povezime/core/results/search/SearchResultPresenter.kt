@@ -28,6 +28,4 @@ class SearchResultPresenter @Inject constructor(private val interactor: ISearchR
     }
 
     override fun me(): User = interactor.me()
-
-    override fun clear() {}
 }

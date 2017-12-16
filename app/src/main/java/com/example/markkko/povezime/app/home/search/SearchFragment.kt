@@ -3,7 +3,6 @@ package com.example.markkko.povezime.app.home.search
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import com.example.markkko.povezime.R
-import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.home.BaseHomeFragment
@@ -14,7 +13,6 @@ import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.search.ISearchMVP
 import com.example.markkko.povezime.core.models.Offer
 import com.example.markkko.povezime.core.models.Search
-import com.example.markkko.povezime.core.models.SearchResultsReq
 import com.google.android.gms.location.places.Place
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -101,11 +99,11 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
         dst = place.latLng
     }
 
-    private fun createSearch(): SearchResultsReq? {
+    private fun createSearch(): Search? {
         val fromName = geocoder.getCityName(src!!)
         val toName = geocoder.getCityName(dst!!)
         if (fromName != null && toName != null) {
-            val search = SearchResultsReq(presenter.me().id, from = formatPoint(src!!), to = formatPoint(dst!!),
+            val search = Search(userId = presenter.me().id, from = formatPoint(src!!), to = formatPoint(dst!!),
                     date = dateString!!, luggage = if (luggage.isChecked) 1 else 0,
                     seats = getIntSafe(seats), oneDay = if (oneDay.isChecked) 1 else 0,
                     fromName = fromName, toName = toName)

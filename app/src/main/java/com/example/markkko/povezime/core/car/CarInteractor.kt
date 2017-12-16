@@ -1,6 +1,6 @@
 package com.example.markkko.povezime.core.car
 
-import com.example.markkko.povezime.app.user.UserRepository
+import com.example.markkko.povezime.core.repositoreis.UserRepository
 import com.example.markkko.povezime.core.data.apis.CarApi
 import com.example.markkko.povezime.core.models.Car
 import com.example.markkko.povezime.core.models.User

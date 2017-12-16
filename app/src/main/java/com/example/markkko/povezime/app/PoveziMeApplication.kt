@@ -1,7 +1,6 @@
 package com.example.markkko.povezime.app
 
 import android.app.Application
-import android.content.Context
 import com.example.markkko.povezime.app.base.views.BaseActivity
 import com.example.markkko.povezime.app.di.app.AndroidModule
 import com.example.markkko.povezime.app.di.app.ApplicationComponent

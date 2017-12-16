@@ -2,7 +2,7 @@ package com.example.markkko.povezime.core.home.search
 
 import android.util.Log
 import com.example.markkko.povezime.core.base.rxTransaction
-import com.example.markkko.povezime.core.models.SearchResultsReq
+import com.example.markkko.povezime.core.models.Search
 import com.example.markkko.povezime.core.models.User
 import com.example.markkko.povezime.core.util.SchedulerProvider
 
@@ -17,7 +17,7 @@ class SearchPresenter @Inject constructor(private val schedulerProvider: Schedul
 
     override lateinit var view: ISearchMVP.View
 
-    override fun getSearchResults(data: SearchResultsReq) {
+    override fun getSearchResults(data: Search) {
         rxTransaction {
             searchInteractor.getSearchResults(data)
                     .subscribeOn(schedulerProvider.backgroundThread())
@@ -29,7 +29,4 @@ class SearchPresenter @Inject constructor(private val schedulerProvider: Schedul
     }
 
     override fun me(): User = searchInteractor.me()
-
-    override fun clear() {
-    }
 }

@@ -10,9 +10,9 @@ import retrofit2.http.POST
 interface SearchApi {
 
     @POST("search/ride")
-    fun getSearchResults(@Body data: SearchResultsReq): Single<SearchResultRes>
+    fun getSearchResults(@Body data: Search): Single<SearchResults>
 
     @POST("search/ride/request")
-    fun postRequest(@Body data: SearchRequestReq) : Single<SearchRequestRes>
+    fun postRequest(@Body data: SearchRequestReq) : Single<MatchInfo>
 
 }

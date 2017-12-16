@@ -4,23 +4,22 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.example.markkko.povezime.R
-import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseFragment
 import com.example.markkko.povezime.app.base.views.adapters.RecyclerItemAdapter
+import com.example.markkko.povezime.core.models.MatchInfo
 import com.example.markkko.povezime.core.models.Offer
-import com.example.markkko.povezime.core.models.SearchRequestRes
 import com.example.markkko.povezime.core.results.search.ISearchResultsMVP
 import kotlinx.android.synthetic.main.fragment_result.*
 import javax.inject.Inject
 
 
-class SearchResultsFragment: BaseFragment(), ISearchResultsMVP.View {
+class SearchResultsFragment : BaseFragment(), ISearchResultsMVP.View {
 
     override fun showMessage(message: String) {}
 
     override fun showOfflineMessage(isCritical: Boolean) {}
 
-    override fun onRequestPosted(request: SearchRequestRes) {
+    override fun onRequestPosted(request: MatchInfo) {
         adapter.notifyDataSetChanged()
     }
 

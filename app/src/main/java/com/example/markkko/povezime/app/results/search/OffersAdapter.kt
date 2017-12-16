@@ -54,9 +54,9 @@ class OffersAdapter @Inject constructor(@Named(AppConstants.ACTIVITY_CONTEXT) co
             val result = entity as Offer
             val user = result.user
 
-            name.text = user.name
+            name.text = user!!.name
             phone.text = user.phone
-            route.text = context.getString(R.string.from_to, result.from, result.to)
+            route.text = context.getString(R.string.from_to, result.fromName, result.toName)
             viber.setImageResource(if (user.viber > 0) R.drawable.ic_viber_active
                 else R.drawable.ic_viber_passive)
             whatsapp.setImageResource(if (user.whatsapp > 0) R.drawable.ic_whatsapp_active

@@ -1,4 +1,4 @@
-package com.example.markkko.povezime.core.results.search
+package com.example.markkko.povezime.core.repositoreis
 
 import com.example.markkko.povezime.core.models.Offer
 import com.example.markkko.povezime.core.models.Search

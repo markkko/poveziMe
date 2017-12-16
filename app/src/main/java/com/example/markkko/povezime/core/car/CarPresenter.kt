@@ -28,8 +28,4 @@ class CarPresenter @Inject constructor(private val carInteractor: ICarMVP.Intera
     }
 
     override fun me(): User = carInteractor.me()
-
-    override fun clear() {
-    }
-
 }

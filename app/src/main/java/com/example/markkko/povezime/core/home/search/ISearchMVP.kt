@@ -1,10 +1,10 @@
 package com.example.markkko.povezime.core.home.search
 
-import com.example.markkko.povezime.core.base.*
+import com.example.markkko.povezime.core.base.BaseUserInteractor
+import com.example.markkko.povezime.core.base.BaseUserPresenter
+import com.example.markkko.povezime.core.base.BaseView
 import com.example.markkko.povezime.core.models.Offer
 import com.example.markkko.povezime.core.models.Search
-import com.example.markkko.povezime.core.models.SearchResultRes
-import com.example.markkko.povezime.core.models.SearchResultsReq
 import io.reactivex.Single
 
 
@@ -18,7 +18,7 @@ interface ISearchMVP {
 
     interface Presenter : BaseUserPresenter {
 
-        fun getSearchResults(data: SearchResultsReq)
+        fun getSearchResults(data: Search)
 
         var view: View
 
@@ -26,7 +26,7 @@ interface ISearchMVP {
 
     interface Interactor : BaseUserInteractor {
 
-        fun getSearchResults(data: SearchResultsReq): Single<List<Offer>>
+        fun getSearchResults(data: Search): Single<List<Offer>>
 
     }
 }
