@@ -13,6 +13,7 @@ data class User(override val id: Long,
                 var viber: Int,
                 var whatsapp: Int,
                 var cars: MutableList<Car> = ArrayList(),
+                var user_id: Long? = null,
                 var selectedCar: Car? = null): BaseEntity {
 
     @SerializedName("reg_id")
@@ -21,7 +22,7 @@ data class User(override val id: Long,
     fun makeDeepCopy(): User {
         val cars = ArrayList<Car>()
         cars.addAll(this.cars)
-        return User(id, email, name, surname, phone, image, viber, whatsapp, cars, selectedCar?.makeDeepCopy())
+        return User(id, email, name, surname, phone, image, viber, whatsapp, cars, user_id, selectedCar?.makeDeepCopy())
     }
 
     fun isCompletedInfo(): Boolean =

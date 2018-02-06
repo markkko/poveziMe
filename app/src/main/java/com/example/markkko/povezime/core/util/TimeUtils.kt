@@ -52,4 +52,12 @@ fun getTodayString() : String {
     return fmt.print(today)
 }
 
+fun convertDateFromDatabase(date: String): String {
+    val subs = date.split("-")
+    return subs[2] + "/" + subs[1] + "/" + subs[0].substring(2,4)
+}
+
+fun convertTimeFromDatabase(time: String): String {
+    return time.substring(0, 5)
+}
 

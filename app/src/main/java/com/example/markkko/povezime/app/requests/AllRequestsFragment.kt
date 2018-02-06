@@ -2,15 +2,17 @@ package com.example.markkko.povezime.app.requests
 
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.base.views.BaseFragment
+import com.example.markkko.povezime.app.base.views.adapters.RecyclerItemAdapter
 import com.example.markkko.povezime.core.models.MatchInfo
 import com.example.markkko.povezime.core.requests.IRequestsMVP
 import kotlinx.android.synthetic.main.fragment_result.*
 import javax.inject.Inject
 
 
-class AllRequestsFragment : BaseFragment(), IRequestsMVP.View {
+class AllRequestsFragment : BaseFragment(), IRequestsMVP.View, MatchInfoDialog.Listener {
 
     override val layoutId: Int = R.layout.fragment_requests
 
@@ -28,8 +30,20 @@ class AllRequestsFragment : BaseFragment(), IRequestsMVP.View {
 
     override fun showOfflineMessage(isCritical: Boolean) {}
 
-    override fun onRequestsFetched(requests: List<MatchInfo>) {
-        adapter.items = requests
+    override fun onRequestsFetched(requests: List<MatchInfo>) { adapter.items = requests }
+
+    override fun onClickDecline(match: MatchInfo) {}
+
+    override fun onClickAccept(match: MatchInfo) {}
+
+    override fun onClickDelete(match: MatchInfo) {}
+
+    private val onItemClickListener: RecyclerItemAdapter.ItemClickListener by lazy {
+        object : RecyclerItemAdapter.ItemClickListener {
+            override fun onItemClick(parent: View?, v: View, position: Int, entity: Any) {
+                MatchInfoDialog.show(activity.fragmentManager, entity as MatchInfo, this@AllRequestsFragment)
+            }
+        }
     }
 
     /********* Setup *********/
@@ -44,6 +58,10 @@ class AllRequestsFragment : BaseFragment(), IRequestsMVP.View {
         list.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         list.adapter = adapter
+    }
+
+    override fun subscribeForUIEvents() {
+        adapter.listener = onItemClickListener
     }
 
     override fun injectDependencies() {

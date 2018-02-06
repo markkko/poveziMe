@@ -12,7 +12,7 @@ class ProfileInteractor @Inject constructor(private val userRepository: UserRepo
 
     override fun updateUser(data: User): Single<User> =
         userApi.updateUser(data)
-                .doOnSuccess { userRepository.user = it }
+                .doOnSuccess { userRepository.updateUser(it) }
 
     override fun me(): User = userRepository.user
 }

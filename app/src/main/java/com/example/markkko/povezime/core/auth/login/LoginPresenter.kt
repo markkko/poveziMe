@@ -48,7 +48,11 @@ class LoginPresenter @Inject constructor(private val schedulerProvider: Schedule
                         prefs.edit().putString(AppConstants.PREF_EMAIL, it.email).apply()
                     }
                     .subscribe({ view.onSendInfoSuccess(it) })
-                    { throwable -> Log.d("thr_send_info", throwable.toString()) }
+                    {
+                        throwable ->
+                        Log.d("thr_send_info", throwable.toString())
+                        view.onLoginFail()
+                    }
         }
     }
 }

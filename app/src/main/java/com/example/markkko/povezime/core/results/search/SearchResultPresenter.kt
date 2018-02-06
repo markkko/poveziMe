@@ -1,8 +1,7 @@
 package com.example.markkko.povezime.core.results.search
 
 import com.example.markkko.povezime.core.models.Offer
-import com.example.markkko.povezime.core.models.SearchRequestReq
-import com.example.markkko.povezime.core.models.Search
+import com.example.markkko.povezime.core.models.RequestReq
 import com.example.markkko.povezime.core.models.User
 import com.example.markkko.povezime.core.util.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +19,7 @@ class SearchResultPresenter @Inject constructor(private val interactor: ISearchR
     override fun getResults(): List<Offer> = interactor.getResults()
 
     override fun postRequest(offerId: Long) {
-        val request = SearchRequestReq(userId = me().id, searchId = interactor.getCurrentSearch().id, offerId = offerId)
+        val request = RequestReq(userId = me().id, searchId = interactor.getCurrentSearch().id, offerId = offerId)
         interactor.postRequest(request)
                 .subscribeOn(schedulerProvider.backgroundThread())
                 .observeOn(schedulerProvider.mainThread())

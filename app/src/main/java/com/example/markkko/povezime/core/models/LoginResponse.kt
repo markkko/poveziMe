@@ -14,7 +14,7 @@ class LoginResponse(val id: Long,
                     var selectedCar: Car? = null) {
 
     fun createUser(): User {
-        return User(id, email, name, surname, phone, image, viber, whatsapp, cars, selectedCar)
+        return User(id, email, name, surname, phone, image, viber, whatsapp, cars, id, selectedCar)
     }
 
 }

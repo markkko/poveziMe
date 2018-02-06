@@ -1,7 +1,6 @@
 package com.example.markkko.povezime.app.results.search
 
 import android.content.Context
-import android.media.Image
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -12,6 +11,8 @@ import com.example.markkko.povezime.app.base.views.adapters.BaseViewHolder
 import com.example.markkko.povezime.app.base.views.adapters.RecyclerItemAdapter
 import com.example.markkko.povezime.app.util.AppConstants
 import com.example.markkko.povezime.core.models.Offer
+import com.example.markkko.povezime.core.util.convertDateFromDatabase
+import com.example.markkko.povezime.core.util.convertTimeFromDatabase
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -29,16 +30,12 @@ class OffersAdapter @Inject constructor(@Named(AppConstants.ACTIVITY_CONTEXT) co
     inner class ViewHolder(view: View) : BaseViewHolder(view) {
 
         @BindView(R.id.name) lateinit var name: TextView
-
         @BindView(R.id.route) lateinit var route: TextView
-
         @BindView(R.id.phone) lateinit var phone: TextView
-
         @BindView(R.id.request) lateinit var request: Button
-
         @BindView(R.id.viber) lateinit var viber: ImageView
-
         @BindView(R.id.whatsapp) lateinit var whatsapp: ImageView
+        @BindView(R.id.date) lateinit var date: TextView
 
         override fun setupListener(listener: ItemClickListener?) {
             listener?.let {
@@ -54,7 +51,7 @@ class OffersAdapter @Inject constructor(@Named(AppConstants.ACTIVITY_CONTEXT) co
             val result = entity as Offer
             val user = result.user
 
-            name.text = user!!.name
+            name.text = context.getString(R.string.full_name, user!!.name, user.surname)
             phone.text = user.phone
             route.text = context.getString(R.string.from_to, result.fromName, result.toName)
             viber.setImageResource(if (user.viber > 0) R.drawable.ic_viber_active
@@ -64,6 +61,7 @@ class OffersAdapter @Inject constructor(@Named(AppConstants.ACTIVITY_CONTEXT) co
             request.text = if (result.isSent) context.getString(R.string.requests_request_sent) else context.getString(R.string.requests_send_request)
             request.setBackgroundResource(if (result.isSent) R.drawable.round_gray_s
                 else R.drawable.round_accent_s)
+            date.text = context.getString(R.string.date_and_time, convertDateFromDatabase(result.date), convertTimeFromDatabase(result.time))
         }
     }
 }

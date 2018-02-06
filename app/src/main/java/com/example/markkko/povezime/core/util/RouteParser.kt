@@ -11,31 +11,38 @@ class RouteParser {
     /**
      * Receives a JSONObject and returns a list of lists containing latitude and longitude
      */
-    fun parse(jObject: JSONObject): List<List<HashMap<String, String>>>? {
-
-        val routes = ArrayList<List<HashMap<String, String>>>()
+    fun parse(jObject: JSONObject): List<HashMap<String, String>>? {
 
         try {
+            // Izvlačimo objekat "routes" iz odgovora.
+            // Interesuje nas samo prva ruta, ne i alternative
+            val jRoute = jObject.getJSONArray("routes").get(0)
 
-            val jRoutes = jObject.getJSONArray("routes")
+            // Nakon toga izvlačimo "legs" iz odgovora.
+            // Broj nogara zavisi od broja putnih tačaka.
+            // Ako je broj putnih tačaka jedan nula, imaćemo samo jednu nogaru.
+            val jLegs = (jRoute as JSONObject).getJSONArray("legs") ?: return null
 
-            val jLegs = (jRoutes.get(0) as JSONObject).getJSONArray("legs") ?: return null
-
+            // Inicijalizujemo trasu
             val path = ArrayList<HashMap<String, String>>()
 
-            /** Traversing all legs  */
+            // Prolazimo kroz sve nogare.
             for (j in 0 until jLegs.length()) {
 
+                // Dohvatamo broj koraka u svakoj nogari.
+                // Jedan korak je jednak jednoj ulici.
+                // Sledeći korak se nastavlja nakon skreanja
                 val jSteps = (jLegs.get(j) as JSONObject).getJSONArray("steps")
 
-                /** Traversing all steps  */
+                // Prolazimo kroz sve korake
                 for (k in 0 until jSteps.length()) {
-                    //for (int k = 0; k < 1; k++) {
-                    var polyline = ""
-                    polyline = ((jSteps.get(k) as JSONObject).get("polyline") as JSONObject).get("points") as String
-                    val list = decodePoly(polyline)
+                    // Svaki korak sadrži "polyline" koji sadrži koordinate koje su enkodovane.
+                    // Mi te koordinate moramo da dekodiramo.
+                    // Dobijamo listu koordinata
+                    val polyline = ((jSteps.get(k) as JSONObject).get("polyline") as JSONObject).get("points") as String
+                    val list = decodePoly(polyline) // as List<LatLng>
 
-                    /** Traversing all points  */
+                    // Prolazimo kroz listu koordinata
                     for (l in list.indices) {
 
                         val lat = java.lang.Double.toString(list[l].latitude)
@@ -44,22 +51,20 @@ class RouteParser {
                         val hm = HashMap<String, String>()
                         hm.put("lat", lat)
                         hm.put("lng", lng)
-                        //LatLng address = list.get(l);
+
+                        //Dodajemo svaku koordinatu u trasu
                         path.add(hm)
                     }
                 }
-                routes.add(path)
             }
-
-            //OfferFragment.globalRoutes = myRoutes;
-            //Log.d("dbgRouteSize", Integer.toString(OfferFragment.globalRoutes.size()));
+            return path
 
         } catch (e: JSONException) {
             e.printStackTrace()
         } catch (e: Exception) {
         }
 
-        return routes
+        return null
     }
 
     /**

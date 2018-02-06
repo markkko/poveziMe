@@ -28,7 +28,7 @@ interface ISearchResultsMVP {
 
         fun getResults(): List<Offer>
 
-        fun postRequest(data: SearchRequestReq) : Single<MatchInfo>
+        fun postRequest(data: RequestReq) : Single<MatchInfo>
 
         fun getCurrentSearch(): Search
     }

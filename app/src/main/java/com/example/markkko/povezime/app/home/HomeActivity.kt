@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.markkko.povezime.R
+import com.example.markkko.povezime.app.auth.LoginActivity
 import com.example.markkko.povezime.app.base.views.BaseActivity
 import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.car.AddCarActivity
@@ -16,13 +17,40 @@ import com.example.markkko.povezime.app.home.offer.OfferFragment
 import com.example.markkko.povezime.app.home.search.SearchFragment
 import com.example.markkko.povezime.app.profile.ProfileActivity
 import com.example.markkko.povezime.app.requests.RequestsActivity
+import com.example.markkko.povezime.core.home.IHomeMVP
 import kotlinx.android.synthetic.main.activity_home.*
+import javax.inject.Inject
 
-class HomeActivity : BaseActivity() {
+class HomeActivity : BaseActivity(), IHomeMVP.View {
 
-    private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+    /**********************
+     * Fields
+     ***********************/
+
+    @Inject lateinit var presenter: IHomeMVP.Presenter
+
+    private val mSectionsPagerAdapter: SectionsPagerAdapter by lazy {
+        SectionsPagerAdapter(supportFragmentManager)
+    }
 
     override val layoutId: Int = 0
+
+    /**********************
+     * Callbacks
+     ***********************/
+
+    override fun showMessage(message: String) {}
+
+    override fun showOfflineMessage(isCritical: Boolean) {}
+
+    override fun onLoggedOut() {
+        navigateToActivity(LoginActivity::class.java)
+        finishAffinity()
+    }
+
+    /**********************
+     * Setup
+     ***********************/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +58,18 @@ class HomeActivity : BaseActivity() {
 
         setSupportActionBar(toolbar)
 
-        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
+        injectDependencies()
 
         container.adapter = mSectionsPagerAdapter
 
         container.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(container))
+
+        presenter.view = this
+    }
+
+    override fun injectDependencies() {
+        injector.inject(this)
     }
 
     override fun create(savedInstanceState: Bundle?) {}
@@ -57,6 +91,9 @@ class HomeActivity : BaseActivity() {
         if (id == R.id.action_add_car) {
             navigateToActivity(AddCarActivity::class.java)
             return true
+        }
+        if (id == R.id.action_logout) {
+            presenter.logout()
         }
 
         return false

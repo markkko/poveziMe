@@ -42,6 +42,18 @@ class OfferPresenter @Inject constructor(private val offerInteractor: IOfferMVP.
     }
 
     override fun offerRide(offer: Offer) {
+        /*(0..100).forEach {
+            offerSignleRide(offer)
+        }*/
+        rxTransaction {
+            offerInteractor.offerRide(offer)
+                    .subscribeOn(schedulerProvider.backgroundThread())
+                    .observeOn(schedulerProvider.mainThread())
+                    .subscribe({ view.onOfferSuccess(it) }, { view.showMessage(it.message!!) })
+        }
+    }
+
+    private fun offerSignleRide(offer: Offer) {
         rxTransaction {
             offerInteractor.offerRide(offer)
                     .subscribeOn(schedulerProvider.backgroundThread())
@@ -56,38 +68,30 @@ class OfferPresenter @Inject constructor(private val offerInteractor: IOfferMVP.
             val parser = RouteParser()
 
             // Starts parsing data
-            val routes = parser.parse(jObject)
+            val route = parser.parse(jObject)
 
-            routes?.let {
-                //getSteps();
-                var points: ArrayList<LatLng>
+            route?.let {
+
+                val points = ArrayList<LatLng>()
                 val lineOptions = PolylineOptions()
 
-                // Traversing through all the routes
-                for (i in it.indices) {
-                    points = ArrayList()
+                // Fetching all the points in i-th route
+                for (j in it.indices) {
+                    val point = it[j]
 
-                    // Fetching i-th route
-                    val path = it[i]
-
-                    // Fetching all the points in i-th route
-                    for (j in path.indices) {
-                        val point = path[j]
-
-                        val lat = java.lang.Double.parseDouble(point["lat"])
-                        val lng = java.lang.Double.parseDouble(point["lng"])
-                        val position = LatLng(lat, lng)
-                        points.add(position)
-                    }
-
-                    // Adding all the points in the route to LineOptions
-                    lineOptions.addAll(points)
-                    lineOptions.width(10f)
-                    lineOptions.color(Color.RED)
-                    Log.d("onPostExecute", "onPostExecute lineoptions decoded")
+                    val lat = java.lang.Double.parseDouble(point["lat"])
+                    val lng = java.lang.Double.parseDouble(point["lng"])
+                    val position = LatLng(lat, lng)
+                    points.add(position)
                 }
 
-                return Route(routes[0], lineOptions)
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points)
+                lineOptions.width(10f)
+                lineOptions.color(Color.RED)
+                Log.d("onPostExecute", "onPostExecute lineoptions decoded")
+
+                return Route(it, lineOptions)
             }
         } catch (e: Exception) {
             Log.d("ParserTask", e.toString())

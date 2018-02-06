@@ -1,5 +1,6 @@
 package com.example.markkko.povezime.app.home.search
 
+import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import com.example.markkko.povezime.R
@@ -30,11 +31,15 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
     }
 
     override fun showResults(results: List<Offer>) {
-        if (results.isNotEmpty()) baseActivity.navigateToActivity(ResultsActivity::class.java)
+        if (results.isNotEmpty()) {
+            val bundle = Bundle()
+            bundle.putInt(ResultsActivity.TYPE, 0)
+            baseActivity.navigateToActivity(ResultsActivity::class.java, bundle)
+        }
         else {
             AlertDialog.Builder(context)
-                    .setTitle("Nema rezultata!")
-                    .setMessage("Bicete obavesteni ako se pojavi")
+                    .setTitle(getString(R.string.dialog_no_results_title))
+                    .setMessage(getString(R.string.dialog_no_results_message))
                     .setNeutralButton("Ok") { _, _ -> }
                     .create().show()
         }
@@ -75,7 +80,11 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
                      valid
                  }
                 .subscribe { valid ->
+                    // Napravimo jedan objekat tipa Search sa podacima
+                    // koje je korisnik uneo
                     val searchRequest = createSearch()
+                    // ako je searchRequest != null
+                    // pozovi prezentera
                     searchRequest?.let { presenter.getSearchResults(it) }
                 }
         //.subscribe { valid -> presenter.getSearchResults(SearchResultsReq.getDefaultRequest(presenter.me().id, getTodayString())) }

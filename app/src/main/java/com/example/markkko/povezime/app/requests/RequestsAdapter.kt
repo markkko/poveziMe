@@ -8,7 +8,9 @@ import com.example.markkko.povezime.R
 import com.example.markkko.povezime.app.base.views.adapters.BaseViewHolder
 import com.example.markkko.povezime.app.base.views.adapters.RecyclerItemAdapter
 import com.example.markkko.povezime.app.util.AppConstants
+import com.example.markkko.povezime.core.models.AnswerType
 import com.example.markkko.povezime.core.models.MatchInfo
+import com.example.markkko.povezime.core.models.Ride
 import com.example.markkko.povezime.core.models.RideType
 import javax.inject.Inject
 import javax.inject.Named
@@ -30,29 +32,37 @@ class RequestsAdapter @Inject constructor(@Named(AppConstants.ACTIVITY_CONTEXT) 
 
         @BindView(R.id.userRoute) lateinit var userRoute: TextView
 
+        @BindView(R.id.myDate) lateinit var myDate: TextView
+
+        @BindView(R.id.userDate) lateinit var userDate: TextView
+
         override fun fill(entity: Any, context: Context) {
             super.fill(entity, context)
 
             val ride = entity as MatchInfo
 
-            if (ride.type == RideType.O) setupOffer(ride, context)
-            else setupSearch(ride, context)
+            val me: Ride
+            val other: Ride
+            if (ride.type == RideType.O) {
+                me = ride.offer
+                other = ride.search
+            } else{
+                me = ride.search
+                other = ride.offer
+            }
 
-        }
+            from.text = context.getString(R.string.ride_from, me.fromName)
+            to.text = context.getString(R.string.ride_to, me.toName)
+            myDate.text = me.date
+            userName.text = other.user!!.name
+            userRoute.text = context.getString(R.string.from_to, other.fromName, other.toName)
+            userDate.text = other.date
 
-        private fun setupSearch(match: MatchInfo, context: Context) {
-            from.text = context.getString(R.string.ride_from, match.search.fromName)
-            to.text = context.getString(R.string.ride_to, match.search.toName)
-            userName.text = match.offer.user!!.name
-            userRoute.text = context.getString(R.string.from_to, match.offer.fromName, match.offer.toName)
-        }
-
-        private fun setupOffer(match: MatchInfo, context: Context) {
-            from.text = context.getString(R.string.ride_from, match.offer.fromName)
-            to.text = context.getString(R.string.ride_to, match.offer.toName)
-            userName.text = match.search.user!!.name
-            userRoute.text = context.getString(R.string.from_to, match.search.fromName, match.search.toName)
+            itemView.setBackgroundResource(when (ride.answer) {
+                AnswerType.A -> R.drawable.empty_accept
+                AnswerType.D -> R.drawable.empty_declined
+                AnswerType.PENDING -> R.drawable.empty_pending
+            })
         }
     }
-
 }

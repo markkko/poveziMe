@@ -2,14 +2,18 @@ package com.example.markkko.povezime.app.home.offer
 
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import butterknife.OnClick
 import com.example.markkko.povezime.R
+import com.example.markkko.povezime.app.base.views.navigateToActivity
 import com.example.markkko.povezime.app.base.views.showToast
 import com.example.markkko.povezime.app.car.AddCarActivity
 import com.example.markkko.povezime.app.home.BaseHomeFragment
+import com.example.markkko.povezime.app.results.ResultsActivity
 import com.example.markkko.povezime.app.util.isNullOrEmpty
 import com.example.markkko.povezime.core.home.offer.IOfferMVP
 import com.example.markkko.povezime.core.models.Offer
@@ -27,6 +31,7 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.fragment_offer.*
+import kotlinx.android.synthetic.main.fragment_requests.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -35,11 +40,26 @@ import javax.inject.Inject
 class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
 
 
-    override fun showMessage(message: String) {}
+    override fun showMessage(message: String) {
+        baseActivity.showToast(message)
+    }
 
     override fun showOfflineMessage(isCritical: Boolean) {}
 
-    override fun onOfferSuccess(results: List<Search>) {}
+    override fun onOfferSuccess(results: List<Search>) {
+        if (results.isNotEmpty()) {
+            val bundle = Bundle()
+            bundle.putInt(ResultsActivity.TYPE, 1)
+            baseActivity.navigateToActivity(ResultsActivity::class.java, bundle)
+        }
+        else {
+            AlertDialog.Builder(context)
+                    .setTitle(getString(R.string.dialog_no_results_title))
+                    .setMessage(getString(R.string.dialog_no_results_message))
+                    .setNeutralButton("Ok") { _, _ -> }
+                    .create().show()
+        }
+    }
 
     override fun onRouteFetched(route: Route) {
         val lineOptions = route.lineOptions
@@ -119,6 +139,10 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
         val mapFragment = childFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        opt1.setAdapter(mAutocompleteAdapter)
+        opt2.setAdapter(mAutocompleteAdapter)
+        opt3.setAdapter(mAutocompleteAdapter)
     }
 
     override fun onResume() {
@@ -367,12 +391,13 @@ class OfferFragment : BaseHomeFragment(), OnMapReadyCallback, IOfferMVP.View {
     }
 
     private fun createOffer(): Offer? {
+        val carId = presenter.me().cars[carSpinner.selectedItemPosition].id
         presenter.route?.let {
             val fromName = geocoder.getCityName(it.fullRoute.first())
             val toName = geocoder.getCityName(it.fullRoute.last())
             if (fromName != null && toName != null)
                 return Offer(userId = presenter.me().id, date = getTodayString(), time = "13:25:00", route = presenter.route!!.toBackendString(),
-                        seats = 3, luggage = 2, fromName = fromName, toName = toName)
+                        seats = 3, luggage = 2, fromName = fromName, toName = toName, carId = carId)
         }
         return null
     }

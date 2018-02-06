@@ -13,6 +13,6 @@ interface SearchApi {
     fun getSearchResults(@Body data: Search): Single<SearchResults>
 
     @POST("search/ride/request")
-    fun postRequest(@Body data: SearchRequestReq) : Single<MatchInfo>
+    fun postRequest(@Body data: RequestReq) : Single<MatchInfo>
 
 }

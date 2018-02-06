@@ -181,4 +181,8 @@
     <string name="ride_from">od %1$s</string>
     <string name="ride_to">do %1$s</string>
     <string name="profile_user_updated">Korisnik je uspesno izmenjen</string>
+    <string name="full_name">%1$s %2$s</string>
+    <string name="date_and_time">%1$s u %2$S</string>
+    <string name="dialog_no_results_title">Nismo pronašli nijedan rezultat!</string>
+    <string name="dialog_no_results_message">Bićete obavešteni ako se pojavi osoba koja se podudara sa vašim zahtevima</string>
 </resources>

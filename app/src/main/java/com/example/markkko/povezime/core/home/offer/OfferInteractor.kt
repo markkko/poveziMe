@@ -25,7 +25,8 @@ class OfferInteractor @Inject constructor(private val offerApi: OfferApi,
 
     override fun offerRide(offer: Offer): Single<List<Search>> =
             offerApi.offerRide(offer)
-                    .doOnSuccess { offerRepository.results = it.offer as ArrayList<Offer> }
+                    .doOnSuccess { offerRepository.currentOffer = it.offer }
+                    .doOnSuccess { offerRepository.results = it.searches as ArrayList<Search> }
                     .map { it.searches }
 
     override fun me(): User = userRepository.user
@@ -59,20 +60,20 @@ class OfferInteractor @Inject constructor(private val offerApi: OfferApi,
         else
             "$origin&$dest&$sensor"
 
-        // Output format
-        val output = "json"
 
         // Building the url to the web service
-        return "https://maps.googleapis.com/maps/api/directions/$output?$parameters"
+        return "https://maps.googleapis.com/maps/api/directions/json?$parameters"
     }
 
-    private @Throws(IOException::class)
-    fun downloadUrl(strUrl: String): String {
+    @Throws(IOException::class)
+    private fun downloadUrl(strUrl: String): String {
         var data = ""
         var iStream: InputStream? = null
         var urlConnection: HttpURLConnection? = null
         try {
             val url = URL(strUrl)
+
+            Log.d("urlToDownload", strUrl)
 
             // Creating an http connection to communicate with url
             urlConnection = url.openConnection() as HttpURLConnection

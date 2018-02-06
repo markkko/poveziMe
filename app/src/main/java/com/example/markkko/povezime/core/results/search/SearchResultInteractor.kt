@@ -16,7 +16,7 @@ class SearchResultInteractor @Inject constructor(private val searchRepository: S
     override fun getResults(): List<Offer> =
             searchRepository.results
 
-    override fun postRequest(data: SearchRequestReq): Single<MatchInfo> =
+    override fun postRequest(data: RequestReq): Single<MatchInfo> =
             searchApi.postRequest(data)
                     .doOnSuccess { searchRepository.markSent(it.offer) }
 

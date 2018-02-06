@@ -25,7 +25,7 @@ class GeocoderUtils @Inject constructor(private var geocoder: Geocoder) {
         if (lat != null && lng != null) {
             try {
                 val addresses = geocoder.getFromLocation(lat, lng, 1)
-                return addresses[0].getAddressLine(0)
+                return addresses[0].getAddressLine(1)
             } catch (e: IOException) {
                 e.printStackTrace()
             }

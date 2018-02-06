@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import butterknife.OnItemSelected
 import com.example.markkko.povezime.R
-import com.example.markkko.povezime.app.PoveziMeApplication
 import com.example.markkko.povezime.app.base.views.BaseFragment
 import com.example.markkko.povezime.app.base.views.BaseFragmentedActivity
 import com.example.markkko.povezime.app.base.views.showToast
@@ -18,6 +17,7 @@ import com.example.markkko.povezime.core.models.Car
 import com.example.markkko.povezime.core.models.User
 import com.example.markkko.povezime.core.profile.IProfileMVP
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_requests.*
 import javax.inject.Inject
 
 class ProfileActivity : BaseFragmentedActivity() {
@@ -83,29 +83,32 @@ class ProfileActivity : BaseFragmentedActivity() {
         private fun refreshUI() {
             val user = presenter.me()
 
-            if (!isInEditingState) {
-                name.isEnabled = false
-                surname.isEnabled = false
-                phone.isEnabled = false
-                email.isEnabled = false
-            } else {
-                name.isEnabled = true
-                surname.isEnabled = true
-                phone.isEnabled = true
-                email.isEnabled = true
-            }
+            name.isEnabled = isInEditingState
+            surname.isEnabled = isInEditingState
+            phone.isEnabled = isInEditingState
+            email.isEnabled = isInEditingState
+            carSpinner.isEnabled = isInEditingState
+            viber.isEnabled = isInEditingState
+            whatsapp.isEnabled = isInEditingState
 
             name.setText(user.name)
             surname.setText(user.surname)
             phone.setText(user.phone)
             email.setText(user.email)
 
+            viber.isChecked = user.viber > 0
+            whatsapp.isChecked = user.whatsapp > 0
+
             val spinnerValues = java.util.ArrayList<String>()
             user.cars.forEach { spinnerValues.add(it.make + " " + it.model) }
+            user.user_id = user.id
 
             val spinnerAdapter = ArrayAdapter(activity, R.layout.spinner_item_simple, spinnerValues)
             spinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
             carSpinner.adapter = spinnerAdapter
+
+            edit?.isVisible = !isInEditingState
+            save?.isVisible = isInEditingState
         }
 
         /*********** Action Bar **************/
@@ -154,6 +157,8 @@ class ProfileActivity : BaseFragmentedActivity() {
             user.surname = getStringSafe(surname)
             user.phone = getStringSafe(phone)
             user.email = getStringSafe(email)
+            user.viber = if (viber.isChecked) 1 else 0
+            user.whatsapp = if (whatsapp.isChecked) 1 else 0
             selectedCar?.let { user.selectedCar = it }
             return user
         }
