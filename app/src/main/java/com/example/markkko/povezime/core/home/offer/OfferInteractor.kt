@@ -23,11 +23,22 @@ class OfferInteractor @Inject constructor(private val offerApi: OfferApi,
                                           private val offerRepository: OfferRepository)
     : IOfferMVP.Interactor {
 
-    override fun offerRide(offer: Offer): Single<List<Search>> =
+    override fun offerRide(offer: Offer): Single<List<Search>> {
+        val startTime = System.currentTimeMillis()
+        return offerApi.offerRide(offer)
+                .doOnSuccess { Log.d("response time", ((System.currentTimeMillis() - startTime) / 1000).toString()) }
+                .doOnSuccess { Log.d("response num", it.searches.size.toString()) }
+                .doOnSuccess { offerRepository.currentOffer = it.offer }
+                .doOnSuccess { offerRepository.results = it.searches as ArrayList<Search> }
+                .map { it.searches }
+    }
+
+
+    /*override fun offerRide(offer: Offer): Single<List<Search>> =
             offerApi.offerRide(offer)
                     .doOnSuccess { offerRepository.currentOffer = it.offer }
                     .doOnSuccess { offerRepository.results = it.searches as ArrayList<Search> }
-                    .map { it.searches }
+                    .map { it.searches }*/
 
     override fun me(): User = userRepository.user
 

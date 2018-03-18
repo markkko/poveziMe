@@ -1,5 +1,6 @@
 package com.example.markkko.povezime.app.notifications.firebase;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
@@ -38,7 +39,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void storeRegIdInPref(String token) {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(AppConstants.PREF_USER, 0);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(AppConstants.PREF_USER, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
         editor.putString(AppConstants.PREF_REG_ID, token);

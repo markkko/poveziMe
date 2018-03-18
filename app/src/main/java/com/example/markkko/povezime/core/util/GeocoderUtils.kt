@@ -12,7 +12,7 @@ class GeocoderUtils @Inject constructor(private var geocoder: Geocoder) {
     fun getCityName(latLng: LatLng): String? {
         try {
             val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            return addresses[0].getAddressLine(1)
+            return addresses[0].locality
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -25,7 +25,7 @@ class GeocoderUtils @Inject constructor(private var geocoder: Geocoder) {
         if (lat != null && lng != null) {
             try {
                 val addresses = geocoder.getFromLocation(lat, lng, 1)
-                return addresses[0].getAddressLine(1)
+                return addresses[0].locality
             } catch (e: IOException) {
                 e.printStackTrace()
             }

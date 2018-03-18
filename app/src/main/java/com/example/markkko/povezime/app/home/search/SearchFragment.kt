@@ -79,7 +79,7 @@ class SearchFragment : BaseHomeFragment(), ISearchMVP.View {
                      }
                      valid
                  }
-                .subscribe { valid ->
+                .subscribe { _ ->
                     // Napravimo jedan objekat tipa Search sa podacima
                     // koje je korisnik uneo
                     val searchRequest = createSearch()

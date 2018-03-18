@@ -1,6 +1,7 @@
 package com.example.markkko.povezime.app
 
 import android.app.Application
+import android.support.multidex.MultiDexApplication
 import com.example.markkko.povezime.app.base.views.BaseActivity
 import com.example.markkko.povezime.app.di.app.AndroidModule
 import com.example.markkko.povezime.app.di.app.ApplicationComponent
@@ -9,7 +10,7 @@ import com.example.markkko.povezime.app.di.app.DaggerApplicationComponent
 import com.example.markkko.povezime.core.di.ActivityModule
 
 
-class PoveziMeApplication : Application() {
+class PoveziMeApplication : MultiDexApplication() {
 
     val appComponent: ApplicationComponent by lazy {
         DaggerApplicationComponent.builder()

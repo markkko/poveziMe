@@ -42,7 +42,7 @@ class OfferPresenter @Inject constructor(private val offerInteractor: IOfferMVP.
     }
 
     override fun offerRide(offer: Offer) {
-        /*(0..100).forEach {
+        /*(0..1000).forEach {
             offerSignleRide(offer)
         }*/
         rxTransaction {
